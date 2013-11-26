@@ -19,7 +19,7 @@
     <OutputPath>.</OutputPath>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
-    <ProjectView>ProjectFiles</ProjectView>
+    <ProjectView>ShowAllFiles</ProjectView>
     <NodejsPort>1337</NodejsPort>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -30,9 +30,30 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="public\javascript\semantic.js" />
+    <Compile Include="public\javascript\semantic.min.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\user.js" />
     <Content Include="package.json" />
+    <Content Include="public\css\semantic.css" />
+    <Content Include="public\css\semantic.min.css" />
+    <Content Include="public\fonts\basic.icons.eot" />
+    <Content Include="public\fonts\basic.icons.svg" />
+    <Content Include="public\fonts\basic.icons.ttf" />
+    <Content Include="public\fonts\basic.icons.woff" />
+    <Content Include="public\fonts\icons.eot" />
+    <Content Include="public\fonts\icons.otf" />
+    <Content Include="public\fonts\icons.svg" />
+    <Content Include="public\fonts\icons.ttf" />
+    <Content Include="public\fonts\icons.woff" />
+    <Content Include="public\images\loader-large-inverted.gif" />
+    <Content Include="public\images\loader-large.gif" />
+    <Content Include="public\images\loader-medium-inverted.gif" />
+    <Content Include="public\images\loader-medium.gif" />
+    <Content Include="public\images\loader-mini-inverted.gif" />
+    <Content Include="public\images\loader-mini.gif" />
+    <Content Include="public\images\loader-small-inverted.gif" />
+    <Content Include="public\images\loader-small.gif" />
     <Content Include="README.md" />
     <Content Include="views\index.jade" />
     <Content Include="views\layout.jade" />
@@ -40,9 +61,10 @@
   <ItemGroup>
     <Folder Include="bin\" />
     <Folder Include="public\" />
+    <Folder Include="public\fonts\" />
     <Folder Include="public\images\" />
-    <Folder Include="public\js\" />
     <Folder Include="public\css\" />
+    <Folder Include="public\javascript\" />
     <Folder Include="routes\" />
     <Folder Include="views\" />
   </ItemGroup>
