@@ -1,0 +1,16 @@
+﻿.panel-primary {
+    border-color: #b2b74e;
+}
+
+.panel-primary > .panel-heading {
+    background-color: #b2b74e;
+    border-color: #b2b74e;
+}
+
+.panel-primary > .panel-heading + .panel-collapse .panel-body {
+    border-top-color: #b2b74e;
+}
+
+.panel-primary > .panel-footer + .panel-collapse .panel-body {
+    border-bottom-color: #b2b74e;
+}

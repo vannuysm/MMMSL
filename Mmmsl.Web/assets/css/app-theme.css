@@ -1,0 +1,81 @@
+﻿body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #eeeee6;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    line-height: 30px;
+    color: #494e55;
+}
+
+hr {
+    border-top: 1px solid #b2b8c1;
+}
+
+a {
+    color: #b2b74e;
+    text-decoration: none;
+}
+
+a:hover,
+a:focus {
+    color: #a3a744;
+    text-decoration: underline;
+}
+
+a:focus {
+    outline: thin dotted;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+h1 {
+    text-transform: uppercase;
+    color: #b2b74e;
+    font-weight: 300;
+}
+
+
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.header-content {
+    margin-top: 20px;
+}
+
+.header-content .nav {
+    margin-top: 10px;
+    position: relative;
+    top: 15px;
+}
+
+.header-content .nav .open > a,
+.header-content .nav .open > a:hover,
+.header-content .nav .open > a:focus {
+    background-color: #b2b74e;
+    color: #fff;
+}
+
+.header-content .nav > li > a {
+    text-transform: uppercase;
+    color: #494e55;
+    font-weight: 300;
+}
+
+.header-content .nav > li > a:hover,
+.header-content .nav > li > a:focus {
+    background-color: transparent;
+    color: #b2b74e;
+}
+
+.logo {
+    height: 63px;
+    width: 368px;
+}
+
+.copyright {
+    text-align: center;
+    font-size: 16px;
+}
