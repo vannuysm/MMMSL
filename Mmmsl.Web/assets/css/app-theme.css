@@ -39,6 +39,7 @@ h1 {
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    position: relative;
 }
 
 .header-content {
@@ -78,4 +79,8 @@ h1 {
 .copyright {
     text-align: center;
     font-size: 16px;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
 }

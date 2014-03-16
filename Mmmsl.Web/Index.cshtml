@@ -1,0 +1,95 @@
+﻿@using System
+@using System.Web.Optimization
+
+@{
+    var bundles = BundleTable.Bundles;
+    
+    bundles.Add(new ScriptBundle("~/assets/js/modernizr").Include("~/assets/js/modernizr-*"));
+    bundles.Add(new ScriptBundle("~/assets/js/vendor").Include(
+        "~/assets/js/jquery-{version}.js",
+        "~/assets/js/bootstrap.js",
+        "~/assets/js/respond.js",
+        "~/assets/js/retina-*",
+        "~/assets/js/angular.js",
+        "~/assets/js/angular-*"
+    ));
+    bundles.Add(new ScriptBundle("~/app").IncludeDirectory("~/app", "*.js", true));
+
+    bundles.Add(new StyleBundle("~/assets/css/vendor")
+        .Include("~/assets/css/bootstrap.css")
+        .Include("~/assets/css/animate.css")
+    );
+    bundles.Add(new StyleBundle("~/assets/css/app").Include("~/assets/css/app-*"));
+}
+
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Welcome to MMMSL</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Poiret+One|PT+Serif|Open+Sans:400,300' rel='stylesheet' type='text/css'>
+
+    @Styles.Render("~/assets/css/vendor")
+    @Styles.Render("~/assets/css/app")
+
+    @Scripts.Render("~/assets/js/modernizr")
+</head>
+<body>
+    <header class="header-content container">
+        <div class="clearfix">
+            <a href="/">
+                <img class="logo" src="/assets/images/mmmsl_logo.png" alt="Mid-Michigan Mens Soccer League" />
+            </a>
+
+            <ul class="nav nav-pills pull-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        Open <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Schedules/Scores</a></li>
+                        <li><a href="#">Rankings</a></li>
+                        <li><a href="#">Teams</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        Over 30 <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Schedules/Scores</a></li>
+                        <li><a href="#">Rankings</a></li>
+                        <li><a href="#">Teams</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        Over 40 <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu pull-right" role="menu">
+                        <li><a href="#">Schedules/Scores</a></li>
+                        <li><a href="#">Rankings</a></li>
+                        <li><a href="#">Teams</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <hr />
+    </header>
+
+    <div class="body-content container">
+        <div ng-view></div>
+    </div>
+
+    <footer class="footer-content container">
+        <hr />
+        <p class="copyright">&copy; @DateTime.Now.Year - Mid-Michigan Mens Soccer League</p>
+    </footer>
+
+    @Scripts.Render("~/assets/js/vendor")
+    @Scripts.Render("~/app")
+</body>
+</html>
