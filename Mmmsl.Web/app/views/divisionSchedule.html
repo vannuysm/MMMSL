@@ -1,0 +1,33 @@
+﻿<div class="page-header">
+    <h1>{{ title }}</h1>
+</div>
+
+<strong ng-show="!schedule.length">No games have been scheduled yet for this division.</strong>
+
+<section ng-repeat="entry in schedule">
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{ entry.date | date: 'fullDate' }}</div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Home Team</th>
+                        <th>Away Team</th>
+                        <th>Field</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+
+                <tbody ng-repeat="game in entry.games">
+                    <tr>
+                        <td>{{ game.homeTeam.name }}</td>
+                        <td>{{ game.awayTeam.name }}</td>
+                        <td>{{ game.location.name }}</td>
+                        <td>{{ game.date | date: 'shortTime' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

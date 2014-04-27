@@ -1,0 +1,116 @@
+﻿<div class="page-header">
+    <h1>{{ title }}</h1>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <form name="profileForm" role="form">
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    <div class="form-group" ng-class="errorClass(profile, 'firstName')">
+                        <label class="control-label" for="first-name-input">First Name</label>
+                        <input type="text" required="required" class="form-control" id="first-name-input" placeholder="First Name" ng-model="profile.firstName" name="firstName">
+                    </div>
+
+                    <div class="form-group" ng-class="errorClass(profile, 'lastName')">
+                        <label class="control-label" for="last-name-input">Last Name</label>
+                        <input type="text" required="required" class="form-control" id="last-name-input" placeholder="Last Name" ng-model="profile.lastName" name="lastName">
+                    </div>
+
+                    <div class="form-group" ng-class="errorClass(profile, ['address1', 'city', 'zipCode'])">
+                        <label class="control-label">Address</label>
+                    </div>
+
+                    <div class="form-group" ng-class="errorClass(profile, 'address1')">
+                        <label class=" sr-only" for="address1-input">
+                            Address Line 1
+                        </label>
+                        <input type="text" required="required" class="form-control" id="address1-input" placeholder="Address Line 1" ng-model="profile.mailingAddress.address1" name="address1">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="sr-only" for="address2-input">Address Line 2</label>
+                        <input type="text" class="form-control" id="address2-input" placeholder="Address Line 2" ng-model="profile.mailingAddress.address2" name="address2">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-inline">
+                            <div class="form-group" ng-class="errorClass(profile, 'city')">
+                                <label class="sr-only" for="city-input">City</label>
+                                <input type="text" required="required" class="form-control" id="city-input" placeholder="City" ng-model="profile.mailingAddress.city" name="city">
+                            </div>
+
+                            <div class="form-group" ng-class="errorClass(profile, 'zipCode')">
+                                <label class="sr-only" for="zip-code-input">Zip Code</label>
+                                <input type="number" required="required" min="48000" max="49799" class="form-control" id="zip-code-input" placeholder="Zip Code" ng-model="profile.mailingAddress.zipCode" name="zipCode">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-group" ng-class="errorClass(profile, 'phone')">
+                            <label class="control-label" for="phone-number-input">Phone</label>
+                            <div class="form-inline">
+                                <input type="tel" required="required" ng-pattern="/\d{3}[\-]\d{3}[\-]\d{4}/" class="form-control" id="phone-number-input" placeholder="555-555-5555" ng-model="profile.phone" name="phone">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-lg btn-primary btn-block" ng-disabled="status.submitting" ng-click="updateProfile(profileForm, profile)">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6" ng-show="playerTeams.length">
+        <h2>Teams that you play on</h2>
+        <div class="panel panel-default">
+            <ul class="list-group" ng-repeat="team in playerTeams">
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <a href="/#/team/{{ team.id }}">{{ team.name }}</a>
+                        </div>
+
+                        <div class="col-lg-4">
+                            {{ team.division.name }}
+                        </div>
+
+                        <div class="col-lg-4">
+                            <a href="mailto:{{ team.manager.profile.email }}">
+                                {{ team.manager.profile.firstName }}
+                                {{ team.manager.profile.lastName }}
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-lg-6" ng-show="managerTeams.length">
+        <h2>Teams that you manage</h2>
+        <div class="panel panel-default">
+            <ul class="list-group" ng-repeat="team in managerTeams">
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <a href="/#/teams/{{ team.id }}">{{ team.name }}</a>
+                        </div>
+
+                        <div class="col-lg-4">
+                            {{ team.division.name }}
+                        </div>
+
+
+                        <div class="col-lg-4">
+                            <a href="/#/team/{{ team.id }}/roster">Manage Roster</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -7,9 +7,6 @@
         ['$scope', homeController]);
 
     function homeController($scope) {
-        $scope.activate = activate;
         $scope.title = 'Welcome to MMMSL';
-
-        function activate() { }
     }
 })();

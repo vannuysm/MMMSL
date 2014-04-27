@@ -1,0 +1,137 @@
+﻿<div class="page-header">
+    <h1>{{ title }}</h1>
+</div>
+
+<p><strong>Already have an account? <a href="/#/login">Log in</a> to manage your teams.</strong></p>
+
+<form name="registration" role="form" novalidate="novalidate">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="step">
+                <div class="step-heading">
+                    <div class="outer-circle">
+                        <div class="inner-circle">
+                            <div class="inner-circle-text">1</div>
+                        </div>
+                    </div>
+                    <h2>Manager Information</h2>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <div class="form-group" ng-class="errorClass(registration, 'firstName')">
+                            <label class="control-label" for="first-name-input">First Name</label>
+                            <input type="text" required="required" class="form-control" id="first-name-input" placeholder="First Name" ng-model="team.manager.firstName" name="firstName">
+                        </div>
+                        
+                        <div class="form-group" ng-class="errorClass(registration, 'lastName')">
+                            <label class="control-label" for="last-name-input">Last Name</label>
+                            <input type="text" required="required" class="form-control" id="last-name-input" placeholder="Last Name" ng-model="team.manager.lastName" name="lastName">
+                        </div>
+
+                        <div class="form-group" ng-class="errorClass(registration, ['address1', 'city', 'zipCode'])">
+                            <label class="control-label">Address</label>
+                        </div>
+                        
+                        <div class="form-group" ng-class="errorClass(registration, 'address1')">
+                            <label class=" sr-only" for="address1-input">
+                            Address Line 1</label>
+                            <input type="text" required="required" class="form-control" id="address1-input" placeholder="Address Line 1" ng-model="team.manager.address.address1" name="address1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="sr-only" for="address2-input">Address Line 2</label>
+                            <input type="text" class="form-control" id="address2-input" placeholder="Address Line 2" ng-model="team.manager.address.address2" name="address2">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-inline">
+                                <div class="form-group" ng-class="errorClass(registration, 'city')">
+                                    <label class="sr-only" for="city-input">City</label>
+                                    <input type="text" required="required" class="form-control" id="city-input" placeholder="City" ng-model="team.manager.address.city" name="city">
+                                </div>
+
+                                <div class="form-group" ng-class="errorClass(registration, 'zipCode')">
+                                    <label class="sr-only" for="zip-code-input">Zip Code</label>
+                                    <input type="number" required="required" min="48000" max="49799" class="form-control" id="zip-code-input" placeholder="Zip Code" ng-model="team.manager.address.zipCode" name="zipCode">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-group" ng-class="errorClass(registration, 'phone')">
+                                <label class="control-label" for="phone-number-input">Phone</label>
+                                <div class="form-inline">
+                                    <input type="tel" required="required" ng-pattern="/\d{3}[\-]\d{3}[\-]\d{4}/" class="form-control" id="phone-number-input" placeholder="555-555-5555" ng-model="team.manager.phone" name="phone">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="step">
+                <div class="step-heading">
+                    <div class="outer-circle">
+                        <div class="inner-circle">
+                            <div class="inner-circle-text">2</div>
+                        </div>
+                    </div>
+                    <h2>Team Information</h2>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <div class="form-group" ng-class="errorClass(registration, 'teamName')">
+                            <label class="control-label" for="team-name-input">Team Name</label>
+                            <input type="text" required="required" class="form-control" id="team-name-input" placeholder="Team Name" ng-model="team.name" name="teamName">
+                        </div>
+
+                        <div class="form-group" ng-class="errorClass(registration, 'teamDivision')">
+                            <label class="control-label" for="division-select">Division</label>
+                            <select required="required" class="form-control" id="division-select" ng-model="team.divisionId" name="teamDivision">
+                                <option value="">- Choose -</option>
+                                <option value="1">Open</option>
+                                <option value="2">Over 30</option>
+                                <option value="3">Over 40</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step last">
+                <div class="step-heading">
+                    <div class="outer-circle">
+                        <div class="inner-circle">
+                            <div class="inner-circle-text">3</div>
+                        </div>
+                    </div>
+                    <h2>Create an Account</h2>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <div class="form-group" ng-class="errorClass(registration, 'email')">
+                            <label class="control-label" for="email-input">Email</label>
+                            <input type="email" required="required" class="form-control" id="email-input" placeholder="Email" ng-model="team.manager.email" name="email">
+                        </div>
+
+                        <div class="form-group" ng-class="errorClass(registration, 'password')">
+                            <label class="control-label" for="password-input">Password</label>
+                            <input type="password" required="required" class="form-control" id="password-input" placeholder="Password" ng-model="team.manager.password" name="password">
+                        </div>
+
+                        <div class="form-group" ng-class="errorClass(registration, 'confirmPassword')">
+                            <label class="control-label" for="password-confirm-input">Confirm Password</label>
+                            <input type="password" required="required" class="form-control" id="password-confirm-input" placeholder="Confirm Password" ng-model="team.manager.confirmPassword" name="confirmPassword">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-lg btn-primary btn-block" ng-disabled="status.submitting" ng-click="register(registration, team)">Register</button>
+</form>
