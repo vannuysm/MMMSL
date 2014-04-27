@@ -6,23 +6,25 @@
         'ngRoute'
     ]);
 
-    app.factory('authInterceptor', function ($rootScope, $q, $window, $location) {
-        return {
-            request: function (config) {
-                config.headers = config.headers || {};
-                if ($window.sessionStorage.apiToken) {
-                    config.headers.Authorization = 'Bearer ' + $window.sessionStorage.apiToken;
+    app.factory('authInterceptor', ['$rootScope', '$q', '$window', '$location',
+        function ($rootScope, $q, $window, $location) {
+            return {
+                request: function (config) {
+                    config.headers = config.headers || {};
+                    if ($window.sessionStorage.apiToken) {
+                        config.headers.Authorization = 'Bearer ' + $window.sessionStorage.apiToken;
+                    }
+                    return config;
+                },
+                responseError: function (response) {
+                    if (response.status === 401) {
+                        $location.path('/login');
+                    }
+                    return $q.reject(response);
                 }
-                return config;
-            },
-            responseError: function (response) {
-                if (response.status === 401) {
-                    $location.path('/login');
-                }
-                return $q.reject(response);
-            }
-        };
-    });
+            };
+        }
+    ]);
 
     app.config(['$routeProvider', '$httpProvider',
         function ($routeProvider, $httpProvider) {

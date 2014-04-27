@@ -14,11 +14,14 @@
         "~/assets/js/angular.js",
         "~/assets/js/angular-*"
     ));
-    bundles.Add(new ScriptBundle("~/app").IncludeDirectory("~/app", "*.js", true));
 
+    bundles.Add(new ScriptBundle("~/app/c").IncludeDirectory("~/app/controllers", "*.js", true));
+    bundles.Add(new ScriptBundle("~/app/a").Include("~/app/app.js"));
+    
     bundles.Add(new StyleBundle("~/assets/css/vendor")
         .Include("~/assets/css/bootstrap.css")
         .Include("~/assets/css/animate.css")
+        .Include("~/assets/css/font-awesome.css")
     );
     bundles.Add(new StyleBundle("~/assets/css/app").Include("~/assets/css/app-*"));
 }
@@ -98,6 +101,7 @@
     </footer>
 
     @Scripts.Render("~/assets/js/vendor")
-    @Scripts.Render("~/app")
+    @Scripts.Render("~/app/a")
+    @Scripts.Render("~/app/c")
 </body>
 </html>
