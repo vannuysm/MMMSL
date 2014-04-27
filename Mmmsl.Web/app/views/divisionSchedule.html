@@ -2,32 +2,38 @@
     <h1>{{ title }}</h1>
 </div>
 
-<strong ng-show="!schedule.length">No games have been scheduled yet for this division.</strong>
+<div class="text-center" ng-show="!isLoaded">
+    <i class="fa fa-3x fa-spinner fa-spin"></i>
+</div>
 
-<section ng-repeat="entry in schedule">
-    <div class="panel panel-primary">
-        <div class="panel-heading">{{ entry.date | date: 'fullDate' }}</div>
+<div ng-show="isLoaded">
+    <p ng-show="!schedule.length">No games have been scheduled yet for this division.</p>
 
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Home Team</th>
-                        <th>Away Team</th>
-                        <th>Field</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
+    <div ng-repeat="entry in schedule">
+        <div class="panel panel-primary">
+            <div class="panel-heading">{{ entry.date | date: 'fullDate' }}</div>
 
-                <tbody ng-repeat="game in entry.games">
-                    <tr>
-                        <td>{{ game.homeTeam.name }}</td>
-                        <td>{{ game.awayTeam.name }}</td>
-                        <td>{{ game.location.name }}</td>
-                        <td>{{ game.date | date: 'shortTime' }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Home Team</th>
+                            <th>Away Team</th>
+                            <th>Field</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+
+                    <tbody ng-repeat="game in entry.games">
+                        <tr>
+                            <td>{{ game.homeTeam.name }}</td>
+                            <td>{{ game.awayTeam.name }}</td>
+                            <td>{{ game.location.name }}</td>
+                            <td>{{ game.date | date: 'shortTime' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</section>
+</div>
