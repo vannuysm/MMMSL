@@ -1,0 +1,81 @@
+﻿<div class="page-header">
+    <h1>{{ title }}</h1>
+</div>
+
+<div class="text-center" ng-show="!isLoaded">
+    <i class="fa fa-3x fa-spinner fa-spin"></i>
+</div>
+
+<div ng-show="isLoaded">
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="form-group">
+                <label>Select a Division</label>
+                <select class="form-control" ng-model="selectedDivision" ng-options="d.name for d in divisions"></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-info" ng-show="!selectedDivision.id">
+        <i class="fa fa-info-circle"></i> Please select a division to begin
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped" ng-show="!!selectedDivision.id">
+            <thead>
+                <tr>
+                    <th>Home Team</th>
+                    <th>Away Team</th>
+                    <th>Field</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody ng-repeat="game in games | orderBy: 'date'">
+                <tr>
+                    <td>{{ game.homeTeam.name }}</td>
+                    <td>{{ game.awayTeam.name }}</td>
+                    <td>{{ game.location.name }}</td>
+                    <td>{{ game.date | date: 'short' }}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td>
+                        <select ng-model="newGame.homeTeam" ng-options="t.name for t in teams"></select>
+                    </td>
+                    <td>
+                        <select ng-model="newGame.awayTeam" ng-options="t.name for t in teams"></select>
+                    </td>
+                    <td>
+                        <select ng-model="newGame.location" ng-options="l.name for l in locations"></select>
+                    </td>
+                    <td>
+                        <input type="text" id="new-game-dt" ng-model="newGame.date" data-date-format="YYYY-MM-DD hh:mm A" />
+                        
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#new-game-dt').datetimepicker({
+                                    sideBySide: true,
+                                    useSeconds: false,
+                                    minuteStepping: 30,
+                                    useCurrent: false
+                                });
+                            });
+                        </script>
+                    </td>
+                    <td>
+                        <div class="btn-toolbar pull-right">
+                            <button class="btn btn-success" ng-click="addGame(newGame)">
+                                <i class="fa fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
