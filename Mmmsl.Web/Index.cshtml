@@ -8,7 +8,9 @@
     bundles.Add(new ScriptBundle("~/assets/js/modernizr").Include("~/assets/js/modernizr-*"));
     bundles.Add(new ScriptBundle("~/assets/js/vendor").Include(
         "~/assets/js/jquery-{version}.js",
+        "~/assets/js/moment.js",
         "~/assets/js/bootstrap.js",
+        "~/assets/js/bootstrap-datetimepicker.js",
         "~/assets/js/respond.js",
         "~/assets/js/retina-*",
         "~/assets/js/angular.js",
@@ -20,6 +22,7 @@
     
     bundles.Add(new StyleBundle("~/assets/css/vendor")
         .Include("~/assets/css/bootstrap.css")
+        .Include("~/assets/css/bootstrap-datetimepicker.css")
         .Include("~/assets/css/animate.css")
         .Include("~/assets/css/font-awesome.css")
     );
@@ -61,8 +64,8 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="/#/open/schedule">Schedules/Scores</a></li>
-                        <li><a href="#">Rankings</a></li>
-                        <li><a href="#">Teams</a></li>
+                        <li><a href="/#/open/standings">Standings</a></li>
+                        <li><a href="/#/open/teams">Teams</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -71,8 +74,8 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="/#/over-30/schedule">Schedules/Scores</a></li>
-                        <li><a href="#">Rankings</a></li>
-                        <li><a href="#">Teams</a></li>
+                        <li><a href="/#/over-30/standings">Standings</a></li>
+                        <li><a href="/#/over-30/teams">Teams</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -81,8 +84,8 @@
                     </a>
                     <ul class="dropdown-menu pull-right" role="menu">
                         <li><a href="/#/over-40/schedule">Schedules/Scores</a></li>
-                        <li><a href="#">Rankings</a></li>
-                        <li><a href="#">Teams</a></li>
+                        <li><a href="/#/over-40/standings">Standings</a></li>
+                        <li><a href="/#/over-40/teams">Teams</a></li>
                     </ul>
                 </li>
             </ul>

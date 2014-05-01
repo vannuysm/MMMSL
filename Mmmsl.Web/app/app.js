@@ -18,7 +18,8 @@
                 },
                 responseError: function (response) {
                     if (response.status === 401) {
-                        $location.path('/login');
+                        var returnUrl = $location.$$path;
+                        $location.path('/login').search({ returnUrl: returnUrl });
                     }
                     return $q.reject(response);
                 }
@@ -50,9 +51,24 @@
                 .when('/:division/schedule', {
                     controller: 'divisionScheduleController',
                     templateUrl: 'app/views/divisionSchedule.html'
+                })
+                .when('/manage/games', {
+                    controller: 'manageGamesController',
+                    templateUrl: 'app/views/manageGames.html'
                 });
         }
     ]);
 
-    app.run();
+    app.run(['$rootScope', '$window', '$location',
+        function ($rootScope, $window, $location) {
+            $rootScope.$on('$routeChangeStart', function (event, next, current) {
+                var isRestricted = next.$$route.originalPath.substring(0, 7) === '/manage';
+
+                if (isRestricted && !$window.sessionStorage.apiToken) {
+                    var returnUrl = $location.$$path;
+                    $location.path('/login').search({ returnUrl: returnUrl });
+                }
+            });
+        }
+    ]);
 })();

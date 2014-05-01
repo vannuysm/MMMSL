@@ -7,6 +7,10 @@
         ['$scope', '$http', '$window', '$location', loginController]);
 
     function loginController($scope, $http, $window, $location) {
+        if ($window.sessionStorage.apiToken) {
+            $location.path('/profile');
+        }
+
         $scope.title = 'Login';
 
         $scope.login = login;
@@ -30,7 +34,15 @@
                 })
                 .success(function (data) {
                     $window.sessionStorage.apiToken = data.access_token;
-                    $location.path('/profile');
+
+                    var returnUrl = $location.search().returnUrl;
+                    if (returnUrl && returnUrl !== '/login') {
+                        $location.search({});
+                        $location.path(returnUrl)
+                    }
+                    else {
+                        $location.path('/profile');
+                    }
                 })
                 .error(function (response) {
                     $scope.errorMessage = response.error_description;
