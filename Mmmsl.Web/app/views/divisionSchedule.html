@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
 
-                    <tbody ng-repeat="game in entry.games">
+                    <tbody ng-repeat="game in entry.games | orderBy: 'date'">
                         <tr>
                             <td>{{ game.homeTeam.name }}</td>
                             <td>{{ game.awayTeam.name }}</td>
