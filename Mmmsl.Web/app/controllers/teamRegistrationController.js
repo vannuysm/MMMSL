@@ -22,7 +22,6 @@
                 $scope.status.submitting = false;
                 return;
             }
-            console.log(team);
 
             $scope.status.submitting = false;
         }

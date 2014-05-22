@@ -84,3 +84,11 @@ h1 {
 .dropdown-toggle {
     cursor: pointer;
 }
+
+.game ul.nav > li {
+    cursor: pointer;
+}
+
+.game > .panel-heading {
+    cursor: pointer;
+}

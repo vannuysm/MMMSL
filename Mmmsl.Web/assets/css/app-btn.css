@@ -53,3 +53,10 @@ fieldset[disabled] .btn-link:hover,
 fieldset[disabled] .btn-link:focus {
     color: #999;
 }
+
+
+.btn-group-add-player {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+}

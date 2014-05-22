@@ -3,7 +3,8 @@
 
     var app = angular.module('app', [
         'ngAnimate',
-        'ngRoute'
+        'ngRoute',
+        'ui.bootstrap'
     ]);
 
     app.factory('authInterceptor', ['$rootScope', '$q', '$window', '$location',
@@ -52,9 +53,17 @@
                     controller: 'divisionScheduleController',
                     templateUrl: 'app/views/divisionSchedule.html'
                 })
-                .when('/manage/games', {
+                .when('/:division/standings', {
+                    controller: 'divisionStandingsController',
+                    templateUrl: 'app/views/divisionStandings.html'
+                })
+                .when('/manage/games/:divisionAlias?', {
                     controller: 'manageGamesController',
                     templateUrl: 'app/views/manageGames.html'
+                })
+                .when('/manage/game/:gameId/result', {
+                    controller: 'manageGameResultsController',
+                    templateUrl: 'app/views/manageGameResults.html'
                 });
         }
     ]);

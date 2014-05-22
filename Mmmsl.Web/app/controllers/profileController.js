@@ -3,7 +3,6 @@
 
     var controllerId = 'profileController';
 
-    // TODO: replace app with your module name
     angular.module('app').controller(controllerId,
         ['$scope', '$http', '$window', profileController]);
 
@@ -46,7 +45,6 @@
                 $scope.status.submitting = false;
                 return;
             }
-            console.log(profile);
 
             $scope.status.submitting = false;
         }

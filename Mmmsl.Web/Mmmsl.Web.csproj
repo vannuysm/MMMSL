@@ -93,19 +93,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\controllers\manageGameResultsController.js" />
+    <Content Include="app\controllers\divisionStandingsController.js" />
     <Content Include="app\controllers\divisionScheduleController.js" />
     <Content Include="app\controllers\manageGamesController.js" />
     <Content Include="app\controllers\loginController.js" />
     <Content Include="app\controllers\profileController.js" />
+    <Content Include="app\views\divisionStandings.html" />
     <Content Include="app\views\divisionSchedule.html" />
     <Content Include="app\views\login.html" />
     <Content Include="app\views\manageGames.html" />
     <Content Include="app\views\profile.html" />
     <Content Include="assets\css\animate.css" />
+    <Content Include="assets\css\app-drawer.css" />
+    <Content Include="assets\css\app-tabs.css" />
     <Content Include="assets\css\app-wizard.css" />
     <Content Include="assets\css\bootstrap-datetimepicker.css" />
     <Content Include="assets\js\bootstrap-datetimepicker.js" />
     <Content Include="assets\js\moment.js" />
+    <Content Include="assets\js\ui-bootstrap.js" />
+    <Content Include="assets\js\underscore.js" />
     <Content Include="index.cshtml" />
     <Content Include="assets\fonts\fontawesome-webfont.eot" />
     <Content Include="assets\fonts\fontawesome-webfont.ttf" />
@@ -149,7 +156,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\css\bootstrap.css.map" />
     <None Include="web.release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
