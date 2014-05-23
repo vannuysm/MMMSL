@@ -18,7 +18,7 @@ namespace Mmmsl.Web
                 "~/assets/js/retina-*",
                 "~/assets/js/angular.js",
                 "~/assets/js/angular-*",
-                "~/assets/js/ui-bootstrap.js"
+                "~/assets/js/ui-bootstrap-*"
             ));
 
             bundles.Add(new ScriptBundle("~/app/c").IncludeDirectory("~/app/controllers", "*.js", true));

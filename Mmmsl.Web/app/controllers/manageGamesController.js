@@ -119,7 +119,7 @@
         $scope.addPlayer = function (team) {
             var modalInstance = $modal.open({
                 templateUrl: 'addPlayerModal.html',
-                controller: addPlayerController,
+                controller: 'addPlayerController',
                 size: 'sm',
                 resolve: {
                     team: function () {
@@ -196,25 +196,5 @@
                 penaltyCard: {}
             };
         }
-    }
-
-    function addPlayerController($scope, $modalInstance, $http, $window, team) {
-        $scope.player = {
-            firstName: '',
-            lastName: ''
-        };
-
-        $scope.team = team;
-
-        $scope.save = function () {
-            $http.post($window.sessionStorage.apiUrl + '/api/teams/' + team.id + '/players', $scope.player)
-                .success(function (result) {
-                    $modalInstance.close(result);
-                });
-        };
-
-        $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
-        };
     }
 })();

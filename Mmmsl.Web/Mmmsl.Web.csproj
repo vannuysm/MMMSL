@@ -97,7 +97,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\controllers\manageGameResultsController.js" />
+    <Content Include="app\controllers\addPlayerController.js" />
     <Content Include="app\controllers\divisionStandingsController.js" />
     <Content Include="app\controllers\divisionScheduleController.js" />
     <Content Include="app\controllers\manageGamesController.js" />
@@ -113,9 +113,13 @@
     <Content Include="assets\css\app-tabs.css" />
     <Content Include="assets\css\app-wizard.css" />
     <Content Include="assets\css\bootstrap-datetimepicker.css" />
+    <Content Include="assets\js\angular-animate.min.js" />
+    <Content Include="assets\js\angular-route.min.js" />
+    <Content Include="assets\js\angular.min.js" />
     <Content Include="assets\js\bootstrap-datetimepicker.js" />
     <Content Include="assets\js\moment.js" />
-    <Content Include="assets\js\ui-bootstrap.js" />
+    <Content Include="assets\js\ui-bootstrap-tpls-0.11.0.js" />
+    <Content Include="assets\js\ui-bootstrap-tpls-0.11.0.min.js" />
     <Content Include="assets\js\underscore.js" />
     <Content Include="Global.asax" />
     <Content Include="assets\fonts\fontawesome-webfont.eot" />
@@ -172,6 +176,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="assets\js\angular-animate.min.js.map" />
+    <Content Include="assets\js\angular-route.min.js.map" />
+    <Content Include="assets\js\angular.min.js.map" />
     <None Include="web.release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
