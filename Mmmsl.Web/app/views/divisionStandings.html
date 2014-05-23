@@ -1,0 +1,47 @@
+﻿<div class="page-header">
+    <h1>{{ title }}</h1>
+</div>
+
+<div class="text-center" ng-show="!isLoaded">
+    <i class="fa fa-3x fa-spinner fa-spin"></i>
+</div>
+
+<div ng-show="isLoaded">
+    <p ng-show="!standings.length">No game results have been posted yet for this division.</p>
+
+    <div class="table-responsive" ng-show="standings.length">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Team</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Ties</th>
+                    <th>Forfeits</th>
+                    <th>Points</th>
+                    <th>Goals For</th>
+                    <th>Goals Against</th>
+                    <th>Goal Differential</th>
+                </tr>
+            </thead>
+
+            <tbody ng-repeat="standing in standings">
+                <tr>
+                    <td class="text-center success">
+                        <strong>{{ $index + 1 }}</strong>
+                    </td>
+                    <td>{{ standing.team.name }}</td>
+                    <td class="text-center">{{ standing.wins }}</td>
+                    <td class="text-center">{{ standing.losses }}</td>
+                    <td class="text-center">{{ standing.ties }}</td>
+                    <td class="text-center">{{ standing.forfeits }}</td>
+                    <td class="text-center">{{ standing.points }}</td>
+                    <td class="text-center">{{ standing.goalsFor }}</td>
+                    <td class="text-center">{{ standing.goalsAgainst }}</td>
+                    <td class="text-center">{{ standing.goalDifferential }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
