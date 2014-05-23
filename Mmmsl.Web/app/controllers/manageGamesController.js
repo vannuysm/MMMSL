@@ -16,12 +16,14 @@
         $scope.games = [];
         $scope.teams = [];
         $scope.locations = [];
+        $scope.penaltyCards = [];
 
         $scope.selectedDivision = {};
         $scope.teamTabs = ['homeTeam', 'awayTeam'];
 
         $scope.newGame = new defaultGame();
         $scope.newGoal = new defaultGoal();
+        $scope.newBooking = new defaultBooking();
 
         $scope.selectGame = function (game) {
             game.hasOpened = true;
@@ -32,26 +34,25 @@
                 return;
             }
 
-            if (!team.players) {
-                $http.get($window.sessionStorage.apiUrl + '/api/teams/' + team.id + '/players')
-                    .success(function (result) {
-                        team.players = result;
-                    });
+            if (team.initialized) {
+                return;
             }
 
-            if (!team.goals) {
-                $http.get($window.sessionStorage.apiUrl + '/api/goals/?gameId=' + game.id + '&teamId=' + team.id)
-                    .success(function (result) {
-                        team.goals = result;
-                    });
-            }
+            $http.get($window.sessionStorage.apiUrl + '/api/teams/' + team.id + '/players')
+                .success(function (result) {
+                    team.players = result;
 
-            //if (!team.penaltyCards) {
-            //    $http.get($window.sessionStorage.apiUrl + '/api/games/' + game.id + '/penaltycards/' + team.id)
-            //        .success(function (result) {
-            //            team.goals = result;
-            //        });
-            //}
+                    team.bookings = _.filter(game.bookings, function (booking) {
+                        return _.contains(_.pluck(team.players, 'id'), booking.playerId);
+                    });
+                });
+            
+            $http.get($window.sessionStorage.apiUrl + '/api/goals/?gameId=' + game.id + '&teamId=' + team.id)
+                .success(function (result) {
+                    team.goals = result;
+                });
+
+            team.initialized = true;
         };
 
         $scope.addGame = function (game) {
@@ -91,8 +92,25 @@
                 game.goals.push(goal);
             });
 
-            $scope.newGoal = new defaultGame();
+            $scope.newGoal = new defaultGoal();
         };
+
+        $scope.addBooking = function (team, booking, game) {
+            $http.post($window.sessionStorage.apiUrl + '/api/bookings', {
+                gameId: game.id,
+                playerId: booking.player.id,
+                misconductCode: booking.penaltyCard.name
+            })
+            .success(function (result) {
+                booking.id = result.id;
+                booking.penaltyCard = result.penaltyCard;
+
+                team.bookings.push(booking);
+                game.bookings.push(booking);
+            });
+
+            $scope.newBooking = new defaultBooking();
+        }
 
         $scope.saveResult = function (game) {
             $http.put($window.sessionStorage.apiUrl + '/api/games/' + game.id + '/result', game);
@@ -151,6 +169,11 @@
                 $scope.isLoaded = true;
             });
 
+        $http.get($window.sessionStorage.apiUrl + '/api/penaltycards')
+            .success(function (result) {
+                $scope.penaltyCards = result;
+            });
+
         function defaultGame() {
             return {
                 date: null,
@@ -164,6 +187,13 @@
             return {
                 player: {},
                 count: 0
+            };
+        }
+
+        function defaultBooking() {
+            return {
+                player: {},
+                penaltyCard: {}
             };
         }
     }
