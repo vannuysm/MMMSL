@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html ng-app="app">
+<html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -21,49 +21,47 @@
 </head>
 <body>
     <header class="header-content container">
-        <div class="clearfix">
-            <a href="/">
-                <img class="logo" src="/assets/images/mmmsl_logo.png" alt="Mid-Michigan Mens Soccer League" />
-            </a>
+        <a href="/" class="pull-left">
+            <img class="logo" src="/assets/images/mmmsl_logo.png" alt="Mid-Michigan Mens Soccer League" />
+        </a>
 
-            <ul class="nav nav-pills pull-right">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown">
-                        Open <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="/#/open/schedule">Schedules/Scores</a></li>
-                        <li><a href="/#/open/standings">Standings</a></li>
-                        <li><a href="/#/open/teams">Teams</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown">
-                        Over 30 <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="/#/over-30/schedule">Schedules/Scores</a></li>
-                        <li><a href="/#/over-30/standings">Standings</a></li>
-                        <li><a href="/#/over-30/teams">Teams</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown">
-                        Over 40 <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu pull-right" role="menu">
-                        <li><a href="/#/over-40/schedule">Schedules/Scores</a></li>
-                        <li><a href="/#/over-40/standings">Standings</a></li>
-                        <li><a href="/#/over-40/teams">Teams</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+        <nav class="navbar" role="navigation">
+            <div class="container">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Open <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/#/open/schedule">Schedules/Scores</a></li>
+                            <li><a href="/#/open/standings">Standings</a></li>
+                            <li><a href="/#/open/teams">Teams</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Over 30 <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/#/over-30/schedule">Schedules/Scores</a></li>
+                            <li><a href="/#/over-30/standings">Standings</a></li>
+                            <li><a href="/#/over-30/teams">Teams</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Over 40 <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/#/over-40/schedule">Schedules/Scores</a></li>
+                            <li><a href="/#/over-40/standings">Standings</a></li>
+                            <li><a href="/#/over-40/teams">Teams</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
         <hr />
     </header>
 
-    <div class="body-content container">
+    <div class="body-content container" ng-app="app">
         @RenderBody()
     </div>
 
