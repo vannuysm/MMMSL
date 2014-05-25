@@ -92,3 +92,11 @@ h1 {
 .game > .panel-heading {
     cursor: pointer;
 }
+
+.spacing-top-default {
+    margin-top: 10px;
+}
+
+.spacing-bottom-default {
+    margin-bottom: 10px;
+}

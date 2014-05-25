@@ -8,7 +8,7 @@
 
 <div ng-show="isLoaded">
     <div class="row">
-        <div class="col-lg-2">
+        <div class="col-xs-8 col-sm-4 col-lg-2">
             <div class="form-group">
                 <label>Select a Division</label>
                 <select class="form-control" ng-model="selectedDivision" ng-options="d.name for d in divisions"></select>
@@ -24,11 +24,24 @@
         <accordion close-others="true">
             <accordion-group class="game" ng-repeat="game in games | orderBy: 'date'">
                 <accordion-heading>
-                    <div class="row" ng-click="$parent.selectGame(game)">
-                        <div class="col-lg-4">{{ game.homeTeam.name }}</div>
-                        <div class="col-lg-4">{{ game.awayTeam.name }}</div>
-                        <div class="col-lg-2">{{ game.location.name }}</div>
-                        <div class="col-lg-2">{{ game.date | date: 'short' }}</div>
+                    <div ng-click="$parent.selectGame(game)">
+                        <div class="row">
+                            <div class="col-xs-5">
+                                <strong>{{ game.homeTeam.name }}</strong>
+                            </div>
+                            <div class="col-xs-2">
+                                <span class="text-center">vs</span>
+                            </div>
+                            <div class="col-xs-5">
+                                <strong>{{ game.awayTeam.name }}</strong>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 spacing-top-default spacing-bottom-default">
+                                {{ game.date | date: 'short' }} at {{ game.location.name }}
+                            </div>
+                        </div>
                     </div>
                 </accordion-heading>
 
