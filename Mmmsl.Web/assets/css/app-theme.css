@@ -100,3 +100,11 @@ h1 {
 .spacing-bottom-default {
     margin-bottom: 10px;
 }
+
+.spacing-top-none {
+    margin-top: 0;
+}
+
+.pointer-link {
+    cursor: pointer;
+}

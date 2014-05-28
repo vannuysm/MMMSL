@@ -13,32 +13,96 @@
         <div class="panel panel-primary">
             <div class="panel-heading">{{ entry.date | date: 'fullDate' }}</div>
 
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Home Team</th>
-                            <th>Away Team</th>
-                            <th>Field</th>
-                            <th>Time</th>
-                            <th></th>
-                        </tr>
-                    </thead>
+            <div class="panel-body" ng-repeat="game in entry.games | orderBy: 'date'">
+                <div class="row visible-md visible-lg">
+                    <div class="col-md-3">{{ game.homeTeam.name }}</div>
+                    <div class="col-md-3">{{ game.awayTeam.name }}</div>
+                    <div class="col-md-3">{{ game.location.name }}</div>
+                    <div class="col-md-2">{{ game.date | date: 'shortTime' }}</div>
+                    <div class="col-md-1 text-right" ng-show="game.includeInStandings">
+                        <a class="pointer-link" data-toggle="collapse" data-target="#game-details-{{ $parent.$index + 1 }}-{{ $index + 1 }}">
+                            {{ game.homeTeamScore }} - {{ game.awayTeamScore }}
+                        </a>
+                    </div>
+                </div>
 
-                    <tbody ng-repeat="game in entry.games | orderBy: 'date'">
-                        <tr>
-                            <td>{{ game.homeTeam.name }}</td>
-                            <td>{{ game.awayTeam.name }}</td>
-                            <td>{{ game.location.name }}</td>
-                            <td>{{ game.date | date: 'shortTime' }}</td>
-                            <td>
-                                <div ng-show="game.includeInStandings">
-                                    {{ game.homeTeamScore }} - {{ game.awayTeamScore }}
+                <div class="visible-sm visible-xs">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <strong>{{ game.homeTeam.name }}</strong>
+                        </div>
+
+                        <div class="col-xs-2">
+                            <span class="text-center">vs</span>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <strong>{{ game.awayTeam.name }}</strong>
+                        </div>
+
+                        <div class="col-xs-2 text-right" ng-show="game.includeInStandings">
+                            <a class="pointer-link" data-toggle="collapse" data-target="#game-details-{{ $parent.$index + 1 }}-{{ $index + 1 }}">
+                                {{ game.homeTeamScore }} - {{ game.awayTeamScore }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-6">
+                            {{ game.date | date: 'shortTime' }} at {{ game.location.name }}
+                        </div>
+                    </div>
+                </div>
+
+                <div id="game-details-{{ $parent.$index + 1 }}-{{ $index + 1 }}" class="well well-sm collapse">
+                    <h3 class="spacing-top-none">{{ game.homeTeam.name }}</h3>
+
+                    <div class="row">
+                        <div class="col-md-6" ng-show="game.homeGoals.length">
+                            <div ng-repeat="goal in game.homeGoals | orderBy: '-count'">
+                                {{ goal.player.profile.name }} :
+                                <ng-pluralize count="goal.count" when="{
+                                    'one': '1 goal',
+                                    'other': '{} goals'
+                                }"></ng-pluralize>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" ng-show="game.homeBookings.length">
+                            <div ng-repeat="booking in game.homeBookings">
+                                <div>
+                                    <i class="fa fa-file" ng-class="{ 'text-warning': booking.penaltyCard.type == 1, 'text-danger': booking.penaltyCard.type == 2 }"></i>
+                                    {{ booking.player.profile.name }} :
+                                    {{ booking.penaltyCard.title }}
                                 </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>{{ game.awayTeam.name }}</h3>
+
+                    <div class="row">
+                        <div class="col-md-6" ng-show="game.awayGoals.length">
+                            <div ng-repeat="goal in game.awayGoals | orderBy: '-count'">
+                                {{ goal.player.profile.name }} :
+                                <ng-pluralize count="goal.count" when="{
+                                    'one': '1 goal',
+                                    'other': '{} goals'
+                                }"></ng-pluralize>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" ng-show="game.awayBookings.length">
+                            <div ng-repeat="booking in game.awayBookings">
+                                <div>
+                                    <i class="fa fa-file" ng-class="{ 'text-warning': booking.penaltyCard.type == 1, 'text-danger': booking.penaltyCard.type == 2 }"></i>
+                                    {{ booking.player.profile.name }} :
+                                    {{ booking.penaltyCard.title }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
