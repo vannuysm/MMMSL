@@ -13,8 +13,12 @@
         <div class="panel panel-primary">
             <div class="panel-heading">{{ entry.date | date: 'fullDate' }}</div>
 
-            <div class="panel-body" ng-repeat="game in entry.games | orderBy: 'date'">
-                <div class="row visible-md visible-lg">
+            <div class="panel-body panel-game" ng-repeat="game in entry.games | orderBy: 'date'">
+                <div class="cancelled-notification" ng-show="game.wasCancelled">
+                    <strong>Game was cancelled</strong>
+                </div>
+
+                <div class="row visible-md visible-lg" ng-class="{ 'cancelled': game.wasCancelled }">
                     <div class="col-md-3">{{ game.homeTeam.name }}</div>
                     <div class="col-md-3">{{ game.awayTeam.name }}</div>
                     <div class="col-md-3">{{ game.location.name }}</div>
@@ -26,7 +30,7 @@
                     </div>
                 </div>
 
-                <div class="visible-sm visible-xs">
+                <div class="visible-sm visible-xs" ng-class="{ 'cancelled': game.wasCancelled }">
                     <div class="row">
                         <div class="col-xs-5">
                             <strong>{{ game.homeTeam.name }}</strong>
@@ -36,22 +40,20 @@
                             <span>vs</span>
                         </div>
 
-                        <div class="col-xs-5">
+                        <div class="col-xs-5 text-right">
                             <strong>{{ game.awayTeam.name }}</strong>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-12 text-right" ng-show="game.includeInStandings">
+                        <div class="col-xs-8">
+                            {{ game.date | date: 'shortTime' }} at {{ game.location.name }}
+                        </div>
+
+                        <div class="col-xs-4 text-right" ng-show="game.includeInStandings">
                             <a class="pointer-link" data-toggle="collapse" data-target="#game-details-{{ $parent.$index + 1 }}-{{ $index + 1 }}">
                                 {{ game.homeTeamScore }} - {{ game.awayTeamScore }}
                             </a>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-xs-12">
-                            {{ game.date | date: 'shortTime' }} at {{ game.location.name }}
                         </div>
                     </div>
                 </div>

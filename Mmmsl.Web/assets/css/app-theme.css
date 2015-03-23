@@ -108,3 +108,22 @@ h1 {
 .pointer-link {
     cursor: pointer;
 }
+
+.cancelled {
+    opacity: 0.1;
+}
+
+.cancelled-notification {
+    position: absolute;
+    top: 15px;
+    text-align: center;
+    left: 0;
+    right: 0;
+    background: #ddd;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+}
+
+.panel-game {
+    position: relative;
+}

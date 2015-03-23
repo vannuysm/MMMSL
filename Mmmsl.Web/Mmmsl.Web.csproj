@@ -100,11 +100,13 @@
     <Content Include="app\controllers\addPlayerController.js" />
     <Content Include="app\controllers\divisionStandingsController.js" />
     <Content Include="app\controllers\divisionScheduleController.js" />
+    <Content Include="app\controllers\leagueInfoController.js" />
     <Content Include="app\controllers\manageGamesController.js" />
     <Content Include="app\controllers\loginController.js" />
     <Content Include="app\controllers\profileController.js" />
     <Content Include="app\views\divisionStandings.html" />
     <Content Include="app\views\divisionSchedule.html" />
+    <Content Include="app\views\leagueInfo.html" />
     <Content Include="app\views\login.html" />
     <Content Include="app\views\manageGames.html" />
     <Content Include="app\views\profile.html" />
@@ -179,6 +181,7 @@
     <Content Include="assets\js\angular-animate.min.js.map" />
     <Content Include="assets\js\angular-route.min.js.map" />
     <Content Include="assets\js\angular.min.js.map" />
+    <None Include="Properties\PublishProfiles\Push to Azure.pubxml" />
     <None Include="web.release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

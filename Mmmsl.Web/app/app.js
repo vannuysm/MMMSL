@@ -64,6 +64,10 @@
                 .when('/manage/game/:gameId/result', {
                     controller: 'manageGameResultsController',
                     templateUrl: 'app/views/manageGameResults.html'
+                })
+                .when('/league-info', {
+                    controller: 'leagueInfoController',
+                    templateUrl: 'app/views/leagueInfo.html'
                 });
         }
     ]);
