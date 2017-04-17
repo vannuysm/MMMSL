@@ -1,0 +1,58 @@
+@model Schedule
+@{
+    ViewData["Title"] = $"{Model.Division.Name} Schedule";
+    var rand = new Random();
+}
+
+@if (!Model.Entries.Any()) {
+    <div class="block block-inverse app-block-intro">
+        <h1>No schedule has been posted yet.</h1>
+    </div>
+}
+
+@foreach(var dateEntry in Model.Entries) {
+    <h2 class="app-schedule-date pb-2 mb-3">@(dateEntry.Key.ToString("D"))</h2>
+    @foreach(var gameGroup in dateEntry.Value) {
+        <h3 class="h5">
+            <span class="icon icon-clock text-info"></span>
+            @(gameGroup.Key.ToString("h:mm tt"))
+        </h3>
+
+        <div class="card-deck mb-3">
+            @foreach(var game in gameGroup) {
+                var homeGoals = rand.Next(0, 10);
+                var awayGoals = rand.Next(0, 10);
+                <div class="card card-inverse app-card-game mb-2">
+                    <div class="card-block">
+                        <h4 class="card-title text-primary">
+                            @game.HomeTeam.Name vs @game.AwayTeam.Name<br/>
+                            <small class="text-info">Field A</small>
+                        </h4>
+
+                        <ul class="nav nav-bordered">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#goal-summary-@(game.Id)">Goals <span class="badge badge-default">@(homeGoals + awayGoals)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#penalty-summary-@(game.Id)">Penalties <span class="badge badge-default">@(rand.Next(0, 5))</span></a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content mt-2">
+                            <div class="tab-pane active" id="goal-summary-@(game.Id)" role="tabpanel">Goal Summary Here</div>
+                            <div class="tab-pane" id="penalty-summary-@(game.Id)" role="tabpanel">Penalty Summary Here</div>
+                        </div>
+                    </div>
+
+                    <div class="statcard p-3 mb-0 text-right">
+                        <span class="statcard-desc text-primary">Final Score</span>
+                        <h3 class="statcard-number">
+                            @(homeGoals) - @(awayGoals)
+                            @* @(game.TeamGoalTotal(game.HomeTeamId)) - @(game.TeamGoalTotal(game.AwayTeamId)) *@
+                        </h3>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}

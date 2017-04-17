@@ -1,0 +1,42 @@
+@model EditTeamModel
+
+@{
+    ViewData["Title"] = "Edit Team";
+}
+
+<form asp-action="Edit" asp-route-id="@Model.Team.Id" method="post">
+  @if (!ViewData.ModelState.IsValid) {
+    <div class="alert alert-danger" asp-validation-summary="All"></div>
+  }
+
+  <div class="form-group row">
+    <label asp-for="Team.DivisionId" class="col-sm-2 col-form-label">Division</label>
+    <div class="col-sm-10">
+      <p class="form-control-static">@Model.Team.Division.Name</p>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label asp-for="Team.Name" class="col-sm-2 col-form-label">Name</label>
+    <div class="col-sm-10">
+      <input asp-for="Team.Name" class="form-control" placeholder="Name" required="required" />
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label asp-for="Team.DivisionId" class="col-sm-2 col-form-label">Manager</label>
+    <div class="col-sm-10">
+      <select asp-for="Team.ManagerId" asp-items="Model.Profiles" class="form-control" required="required"></select>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="offset-sm-2 col-sm-10">
+      <button type="submit" class="btn btn-success">
+          <span class="icon icon-edit"></span> Edit
+      </button>
+    </div>
+  </div>
+
+  <input name="Id" type="hidden" value="@Model.Team.Id" />
+</form>

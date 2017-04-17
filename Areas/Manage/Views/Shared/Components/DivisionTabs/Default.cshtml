@@ -1,0 +1,11 @@
+@model List<Division>
+
+<ul class="nav nav-bordered">
+    @foreach(var division in Model) {
+        <li class="nav-item">
+            <nav-link class="nav-link" asp-action="Index" asp-route-id="@(division.Id)">
+                @division.Name
+            </nav-link>
+        </li>
+    }
+</ul>

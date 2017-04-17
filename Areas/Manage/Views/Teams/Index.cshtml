@@ -1,0 +1,41 @@
+@model PaginatedList<Team>
+
+@{
+    ViewData["Title"] = "Manage Teams";
+}
+
+@await Component.InvokeAsync("DivisionTabs")
+
+@if (!Model.Any()) {
+    Html.RenderPartial("NoRecords");
+    return;
+}
+
+<table class="table table-striped table-hover table-responsive">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Manager</th>
+            <th>@Html.Partial("CreateNew")</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach(var team in Model) {
+            <tr>
+                <td>@team.Name</td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(team.Manager.Email)) {
+                        <a href="mailto:@(team.Manager.Email)">@team.Manager.FullName</a>
+                    }
+                    else {
+                        @team.Manager.FullName
+                    }
+                </td>
+                <td>@Html.Partial("Actions", team)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.Partial("Pagination")

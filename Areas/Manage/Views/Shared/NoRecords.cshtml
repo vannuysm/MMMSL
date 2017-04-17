@@ -1,0 +1,13 @@
+@{
+    var divisionId = ViewContext.RouteData.Values["id"];
+}
+
+<div class="callout">
+    <div class="callout-content">
+        Nothing exists yet. Go ahead and <a asp-action="Create" asp-route-divisionId="@divisionId">create your first entry</a>!
+    </div>
+
+    <div class="callout-secondary">
+        <a class="btn btn-success" asp-action="Create" asp-route-divisionId="@divisionId"><span class="icon icon-plus">Create New</a>
+    </div>
+</div>

@@ -1,0 +1,6 @@
+@{
+    var divisionId = ViewContext.RouteData.Values["id"];
+}
+<div class="text-right">
+    <a class="btn btn-sm btn-success" asp-action="Create" asp-route-divisionId="@divisionId"><span class="icon icon-plus">Create New</a>
+</div>

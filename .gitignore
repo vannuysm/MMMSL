@@ -231,3 +231,6 @@ results
 
 # NPM Modules
 node_modules
+
+# Environment-specific config files
+appSettings.*.json

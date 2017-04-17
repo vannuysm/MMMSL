@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Mid-Michigan Men's Soccer League</title>
+    
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+    <environment names="Development">
+        <link rel="stylesheet" href="~/css/toolkit-minimal.css" />
+        <link rel="stylesheet" href="~/css/application-minimal.css" />
+        <link rel="stylesheet" href="~/css/manage-minimal.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/css/toolkit-minimal.min.css" />
+        <link rel="stylesheet" href="~/css/application-minimal.min.css" />
+        <link rel="stylesheet" href="~/css/manage-minimal.min.css" />
+    </environment>
+
+    @RenderSection("Stylesheets", required: false)
+</head>
+<body>
+    @await Component.InvokeAsync("ManagementNavigation")
+
+    <section class="container">
+        @if (!string.IsNullOrWhiteSpace((string)ViewData["Title"])) {
+            <h1 class="app-page-title">@ViewData["Title"]</h1>
+        }
+        @RenderBody()
+    </section>
+
+    <footer class="block app-block-footer text-center mt-5">
+        <div class="container">
+            <p>&copy; @DateTime.Now.Year - Mid-Michigan Men's Soccer League</p>
+        </div>
+    </footer>
+
+    <environment names="Development">
+        <script src="http://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="~/js/toolkit.js" asp-append-version="true"></script>
+        <script src="~/js/manage.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="http://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="~/js/toolkit.min.js" asp-append-version="true"></script>
+        <script src="~/js/manage.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,41 @@
+@model List<Division>
+
+@{
+    var accountAction = User.Identity.IsAuthenticated ? "Logout" : "Login";
+}
+
+<div class="container">
+    <nav class="navbar navbar-light navbar-toggleable-sm navbar-static-top text-uppercase app-navbar mb-3">
+        <button class="navbar-toggler navbar-toggler-right hidden-md-up" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <a class="navbar-brand mr-auto" href="/">
+            <img src="~/images/logo-with-text.svg" class="img-fluid app-logo" />
+        </a>
+
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="nav navbar-nav ml-auto">
+                @foreach(var division in Model) {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @division.Name
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="/@(division.Id)/schedule">Schedule/Scores</a>
+                            <a class="dropdown-item" href="/@(division.Id)/standings">Standings</a>
+                            <a class="dropdown-item" href="/@(division.Id)/teams">Teams</a>
+                        </div>
+                    </li>
+                }
+                
+                <nav-list-item class="nav-item" asp-controller="LeagueInformation" asp-action="Index">
+                    League Information
+                </nav-list-item>
+
+                @Html.Partial("LoginNavItem")
+            </ul>
+        </div>
+    </nav>
+</div>
