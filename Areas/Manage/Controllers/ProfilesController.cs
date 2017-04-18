@@ -7,7 +7,7 @@ using mmmsl.Models;
 namespace mmmsl.Areas.Manage.Controllers
 {
     [Area("Manage")]
-    public class ProfilesController : Controller
+    public class ProfilesController : AdminController
     {
         private readonly MmmslDatabase database;
 

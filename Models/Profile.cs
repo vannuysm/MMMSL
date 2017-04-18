@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace mmmsl.Models
@@ -15,5 +16,6 @@ namespace mmmsl.Models
         
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+        public List<Role> Roles { get; set; }
     }
 }

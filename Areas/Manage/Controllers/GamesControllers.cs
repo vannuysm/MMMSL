@@ -7,7 +7,7 @@ using mmmsl.Models;
 namespace mmmsl.Areas.Manage.Controllers
 {
     [Area("Manage")]
-    public class GamesController : Controller
+    public class GamesController : AdminController
     {
         private readonly MmmslDatabase database;
 

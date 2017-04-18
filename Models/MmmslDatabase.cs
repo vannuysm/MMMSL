@@ -16,10 +16,24 @@ namespace mmmsl.Models
         public DbSet<Game> Games { get; set; }
         public DbSet<Goal> Goals { get; set; }
         public DbSet<Profile> Profiles { get; set; }
+        public DbSet<Role> Roles { get; set; }
         public DbSet<Team> Teams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Profile>()
+                .HasIndex(profile => profile.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<Role>().HasKey(role => new {
+                role.ProfileId,
+                role.Name
+            });
+
+            modelBuilder.Entity<Role>()
+                .HasOne<Profile>()
+                .WithMany(profile => profile.Roles);
+            
             var foreignKeys = modelBuilder.Model
                 .GetEntityTypes()
                 .SelectMany(e => e.GetForeignKeys());

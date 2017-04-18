@@ -10,7 +10,7 @@
                 redirectUrl: callbackUrl,
                 responseType: 'code',
                 params: {
-                    scope: 'openid',
+                    scope: 'openid email user_metadata',
                     state: state,
                     nonce: nonce
                 }

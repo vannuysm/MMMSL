@@ -9,7 +9,7 @@ using mmmsl.Models;
 namespace mmmsl.Areas.Manage.Controllers
 {
     [Area("Manage")]
-    public class TeamsController : Controller
+    public class TeamsController : AdminController
     {
         private readonly MmmslDatabase database;
 

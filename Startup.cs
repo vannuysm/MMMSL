@@ -14,6 +14,12 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using System;
 using System.Threading.Tasks;
 using mmmsl.Settings;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace mmmsl
 {
@@ -32,9 +38,10 @@ namespace mmmsl
 
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             services.AddAuthentication(options => options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
             services.Configure<OpenIdConnectOptions>(options => {
                 options.AuthenticationScheme = "Auth0";
@@ -46,18 +53,25 @@ namespace mmmsl
                 options.ResponseType = "code";
                 options.CallbackPath = new PathString("/signin-auth0");
                 options.ClaimsIssuer = "Auth0";
+                options.TokenValidationParameters = new TokenValidationParameters {
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
+                };
                 options.Events = new OpenIdConnectEvents {
-                    OnRedirectToIdentityProviderForSignOut = HandleRedirectToIdentityProviderForSignOut
+                    OnRedirectToIdentityProviderForSignOut = HandleRedirectToIdentityProviderForSignOut,
+                    OnTicketReceived = HandleTicketReceived
                 };
             });
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc();
+            services.AddAuthorization(options => {
+                options.AddPolicy("CanManageLeague", policy => policy.RequireRole("admin"));
+            });
             services.AddDbContext<MmmslDatabase>(options => options.UseSqlServer(Configuration.GetConnectionString("mmmsl")));
             services.AddOptions();
             services.Configure<Auth0Settings>(Configuration.GetSection("Auth0"));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IOptions<OpenIdConnectOptions> oidcOptions, MmmslDatabase database)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -122,6 +136,35 @@ namespace mmmsl
             context.HandleResponse();
 
             return Task.CompletedTask;
+        }
+
+        private async Task HandleTicketReceived(TicketReceivedContext context)
+        {
+            var identity = context.Principal.Identity as ClaimsIdentity;
+            if (identity == null) {
+                return;
+            }
+
+            if (!identity.HasClaim(claim => claim.Type == "email")) {
+                return;
+            }
+
+            var database = context.HttpContext.RequestServices.GetService<MmmslDatabase>();
+            var email = identity.Claims.FirstOrDefault(claim => claim.Type == "email")?.Value;
+
+            var roles = await database.Profiles
+                .Include(profile => profile.Roles)
+                .Where(profile => profile.Email == email)
+                .Select(profile => profile.Roles.Select(role =>
+                    new Claim("role", role.Name)
+                ))
+                .SingleOrDefaultAsync();
+
+            if (!roles.Any()) {
+                return;
+            }
+
+            identity.AddClaims(roles);
         }
     }
 }
