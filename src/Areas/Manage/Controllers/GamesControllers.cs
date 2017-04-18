@@ -1,8 +1,8 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using mmmsl.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace mmmsl.Areas.Manage.Controllers
 {
@@ -18,8 +18,6 @@ namespace mmmsl.Areas.Manage.Controllers
 
         public async Task<IActionResult> Index(string id, int? page)
         {
-            const int pageSize = 10;
-
             if (string.IsNullOrWhiteSpace(id)) {
                 return RedirectToAction("Index", new {
                     id = (await database.Divisions.FirstAsync())?.Id
@@ -33,7 +31,7 @@ namespace mmmsl.Areas.Manage.Controllers
                 .Include(game => game.Goals)
                 .OrderBy(game => game.DateAndTime);
 
-            return View(await PaginatedList<Game>.CreateAsync(games, page ?? 1, pageSize));
+            return PaginatedIndex(await PaginatedList<Game>.CreateAsync(games, page ?? 1, DefaultPageSize));
         }
     }
 }

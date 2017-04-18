@@ -47,7 +47,7 @@ namespace mmmsl
 
         public static LockContext GenerateLockContext(this HttpContext httpContext, OpenIdConnectOptions options, string returnUrl = null)
         {
-            LockContext lockContext = new LockContext();
+            var lockContext = new LockContext();
             lockContext.ClientId = options.ClientId;
 
             Uri authorityUri;
@@ -55,7 +55,7 @@ namespace mmmsl
                 lockContext.Domain = authorityUri.Host;
             }
 
-            string callbackUrl = BuildRedirectUri(httpContext.Request, options.CallbackPath);
+            var callbackUrl = BuildRedirectUri(httpContext.Request, options.CallbackPath);
             lockContext.CallbackUrl = callbackUrl;
 
             var nonce = options.ProtocolValidator.GenerateNonce();

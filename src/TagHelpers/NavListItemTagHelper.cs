@@ -16,7 +16,7 @@ namespace mmmsl.TagHelpers
             base.Process(context, output);
 
             var childContent = await output.GetChildContentAsync();
-            string content = childContent.GetContent();
+            var content = childContent.GetContent();
             
             output.TagName = "li";
             var hrefAttr = output.Attributes.FirstOrDefault(a => a.Name == "href");

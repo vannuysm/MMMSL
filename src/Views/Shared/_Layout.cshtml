@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -29,15 +29,6 @@
         <div class="container">
             <p>&copy; @DateTime.Now.Year - Mid-Michigan Men's Soccer League</p>
         </div>
-
-        @if (User.Identity.IsAuthenticated) {
-            <dl class="text-left">
-                @foreach(var claim in User.Claims) {
-                    <dt>@claim.Type</dt>
-                    <dd>@claim.Value</dd>
-                }
-            </dl>
-        }
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>

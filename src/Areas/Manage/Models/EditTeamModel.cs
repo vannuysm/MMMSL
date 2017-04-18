@@ -6,8 +6,8 @@ namespace mmmsl.Areas.Manage.Models
 {
     public class EditTeamModel
     {
-        public Team Team { get; set; }
-        public List<SelectListItem> Divisions { get; set; }
-        public List<SelectListItem> Profiles { get; set; }
+        public Team Team { get; set; } = new Team();
+        public List<SelectListItem> Divisions { get; set; } = new List<SelectListItem>();
+        public List<SelectListItem> Profiles { get; set; } = new List<SelectListItem>();
     }
 }

@@ -1,10 +1,10 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using mmmsl.Areas.Manage.Models;
 using mmmsl.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace mmmsl.Areas.Manage.Controllers
 {
@@ -20,8 +20,6 @@ namespace mmmsl.Areas.Manage.Controllers
 
         public async Task<IActionResult> Index(string id, int? page)
         {
-            const int pageSize = 10;
-
             if (string.IsNullOrWhiteSpace(id)) {
                 return RedirectToAction("Index", new {
                     id = (await database.Divisions.FirstAsync())?.Id
@@ -30,9 +28,10 @@ namespace mmmsl.Areas.Manage.Controllers
 
             var teams = database.Teams
                 .Where(team => team.DivisionId == id)
-                .Include(team => team.Manager);
+                .Include(team => team.Manager)
+                .OrderBy(team => team.Name);
 
-            return View(await PaginatedList<Team>.CreateAsync(teams, page ?? 1, pageSize));
+            return PaginatedIndex(await PaginatedList<Team>.CreateAsync(teams, page ?? 1, DefaultPageSize));
         }
 
         public async Task<IActionResult> Create(string divisionId)

@@ -1,8 +1,9 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using mmmsl.Areas.Manage.Models;
 using mmmsl.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace mmmsl.Areas.Manage.Controllers
 {
@@ -18,13 +19,11 @@ namespace mmmsl.Areas.Manage.Controllers
 
         public async Task<IActionResult> Index(int? page)
         {
-            const int pageSize = 10;
-
             var profiles = database.Profiles
                 .OrderBy(profile => profile.FirstName)
                 .ThenBy(profile => profile.LastName);
 
-            return View(await PaginatedList<Profile>.CreateAsync(profiles, page ?? 1, pageSize));
+            return PaginatedIndex(await PaginatedList<Profile>.CreateAsync(profiles, page ?? 1, DefaultPageSize));
         }
 
         public IActionResult Create()
@@ -48,32 +47,54 @@ namespace mmmsl.Areas.Manage.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var profile = await database.Profiles.SingleOrDefaultAsync(p => p.Id == id);
+            var profile = await database.Profiles
+                .Include(p => p.Roles)
+                .SingleOrDefaultAsync(p => p.Id == id);
 
             if (profile == null) {
                 return NotFound();
             }
 
-            return View(profile);
+            return View(new EditProfileModel {
+                Profile = profile,
+                MakeAdministrator = profile.HasRole(AppRoles.Administrator)
+            });
         }
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(int id)
+        public async Task<IActionResult> EditPost(int id, EditProfileModel model)
         {
             database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
             
-            var profileToUpdate = await database.Profiles.SingleOrDefaultAsync(p => p.Id == id);
+            var profileToUpdate = await database.Profiles
+                .Include(p => p.Roles)
+                .SingleOrDefaultAsync(p => p.Id == id);
 
             if (profileToUpdate == null) {
                 return NotFound();
             }
             
-            var didModelUpdate = await TryUpdateModelAsync<Profile>(profileToUpdate, "",
+            var didModelUpdate = await TryUpdateModelAsync(profileToUpdate, "Profile",
                 p => p.Id,
                 p => p.FirstName,
                 p => p.LastName,
                 p => p.Email);
+
+            var userIsAdministrator = profileToUpdate.HasRole(AppRoles.Administrator);
+
+            if (userIsAdministrator && !model.MakeAdministrator) {
+                profileToUpdate.Roles.Remove(profileToUpdate.GetRole(AppRoles.Administrator));
+                didModelUpdate = true;
+            }
+
+            if (!userIsAdministrator && model.MakeAdministrator) {
+                profileToUpdate.Roles.Add(new Role {
+                    Name = AppRoles.Administrator,
+                    ProfileId = id
+                });
+                didModelUpdate = true;
+            }
 
             if (didModelUpdate) {
                 try {

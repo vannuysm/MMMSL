@@ -25,12 +25,12 @@
             <tr>
                 <td>@team.Name</td>
                 <td>
-                    @if (!string.IsNullOrWhiteSpace(team.Manager.Email)) {
-                        <a href="mailto:@(team.Manager.Email)">@team.Manager.FullName</a>
-                    }
-                    else {
-                        @team.Manager.FullName
-                    }
+                    <div class="d-flex justify-content-between">
+                      <span>@team.Manager.FullName</span>
+                      @if (!string.IsNullOrWhiteSpace(team.Manager.Email)) {
+                        <a class="ml-2" href="mailto:@(team.Manager.Email)"><span class="icon icon-mail"></span></a>
+                      }
+                    </div>
                 </td>
                 <td>@Html.Partial("Actions", team)</td>
             </tr>

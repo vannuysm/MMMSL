@@ -1,8 +1,8 @@
-using System.Threading.Tasks;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using mmmsl.Models;
+using System.Threading.Tasks;
 
 namespace mmmsl.Areas.Manage.Controllers
 {
@@ -18,8 +18,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
         public async Task<IActionResult> Index(int? page)
         {
-            const int pageSize = 10;
-            return View(await PaginatedList<Division>.CreateAsync(database.Divisions, page ?? 1, pageSize));
+            return PaginatedIndex(await PaginatedList<Division>.CreateAsync(database.Divisions, page ?? 1, DefaultPageSize));
         }
 
         public IActionResult Create()

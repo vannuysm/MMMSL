@@ -17,5 +17,15 @@ namespace mmmsl.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         public List<Role> Roles { get; set; }
+
+        public bool HasRole(string roleName)
+        {
+            return Roles?.HasRole(roleName) ?? false;
+        }
+
+        public Role GetRole(string roleName)
+        {
+            return Roles?.GetRole(roleName);
+        }
     }
 }

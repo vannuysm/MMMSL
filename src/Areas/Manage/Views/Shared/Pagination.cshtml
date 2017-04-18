@@ -5,11 +5,13 @@
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    var prevPageIndex = Model.PageIndex > 1 ? Model.PageIndex - 1 : 1;
+    var nextPageIndex = Model.PageIndex < Model.TotalPages ? Model.PageIndex + 1 : Model.PageIndex;
 }
 <nav>
   <ul class="pagination justify-content-center">
     <li class="page-item @prevDisabled">
-      <a class="page-link" href="#" aria-label="Previous">
+      <a class="page-link" aria-label="Previous" asp-action="Index" asp-route-page="@prevPageIndex">
         <span aria-hidden="true">&laquo;</span>
         <span class="sr-only">Previous</span>
       </a>
@@ -22,7 +24,7 @@
     }
 
     <li class="page-item @nextDisabled">
-      <a class="page-link" href="#" aria-label="Next">
+      <a class="page-link"aria-label="Next" asp-action="Index" asp-route-page="@nextPageIndex">
         <span aria-hidden="true">&raquo;</span>
         <span class="sr-only">Next</span>
       </a>

@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace mmmsl.TagHelpers
@@ -25,8 +24,8 @@ namespace mmmsl.TagHelpers
 
         protected bool ShouldBeActive()
         {
-            string currentController = ViewContext.RouteData.Values["Controller"].ToString();
-            string currentAction = ViewContext.RouteData.Values["Action"].ToString();
+            var currentController = ViewContext.RouteData.Values["Controller"].ToString();
+            var currentAction = ViewContext.RouteData.Values["Action"].ToString();
 
             if (!string.IsNullOrWhiteSpace(Controller) && Controller.ToLower() != currentController.ToLower()) {
                 return false;
@@ -44,7 +43,7 @@ namespace mmmsl.TagHelpers
                 return true;
             }
 
-            foreach (KeyValuePair<string, string> routeValue in RouteValues) {
+            foreach (var routeValue in RouteValues) {
                 if (!ViewContext.RouteData.Values.ContainsKey(routeValue.Key) || ViewContext.RouteData.Values[routeValue.Key].ToString() != routeValue.Value) {
                     return false;
                 }

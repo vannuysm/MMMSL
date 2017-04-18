@@ -4,7 +4,8 @@
     window.InitializeLock = function(clientId, domain, callbackUrl, state, nonce) {
         var lock = new Auth0Lock(clientId, domain, {
             theme: {
-                logo: `${window.location.origin}/images/logo.svg`
+                logo: `${window.location.origin}/images/logo.svg`,
+                primaryColor: '#eeeee6'
             },
             auth: {
                 redirectUrl: callbackUrl,
