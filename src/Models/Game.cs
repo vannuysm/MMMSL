@@ -42,5 +42,9 @@ namespace mmmsl.Models
         public List<Penalty> TeamPenalties(int teamId) => Penalties?
             .Where(penalty => penalty.TeamId == teamId)
             .ToList() ?? new List<Penalty>();
+
+        public List<Goal> TeamGoals(int teamId) => Goals?
+            .Where(goal => goal.TeamId == teamId)
+            .ToList() ?? new List<Goal>();
     }
 }

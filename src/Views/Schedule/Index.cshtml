@@ -36,7 +36,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#penalty-summary-@(game.Id)">
                                             Penalties
-                                            <span class="badge badge-default ml-1">0</span>
+                                            <span class="badge badge-default ml-1">@game.Penalties.Count</span>
                                         </a>
                                     </li>
                                 }
@@ -47,14 +47,40 @@
                                     @if (!game.Goals.Any()) {
                                         <p>Lots of running, no production.</p>
                                     }
+                                    else {
+                                        <div class="row">
+                                            @{
+                                                var homeTeamGoals = game.TeamGoals(game.HomeTeamId);
+                                                var awayTeamGoals = game.TeamGoals(game.AwayTeamId);
+                                            }
+
+                                            <div class="col-md-6">
+                                                @Html.Partial("TeamGoals", new TeamGoalsModel { Team = game.HomeTeam, Goals = homeTeamGoals })
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                @Html.Partial("TeamGoals", new TeamGoalsModel { Team = game.AwayTeam, Goals = awayTeamGoals })
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
                             
                                 @if (game.Penalties.Any()) {
                                     <div class="tab-pane" id="penalty-summary-@(game.Id)" role="tabpanel">
-                                        @Html.Partial("TeamPenalties", new TeamPenaltiesModel {
-                                            Team = game.HomeTeam,
-                                            Penalties = game.TeamPenalties(game.HomeTeamId)
-                                        })
+                                        <div class="row">
+                                            @{
+                                                var homeTeamPenalties = game.TeamPenalties(game.HomeTeamId);
+                                                var awayTeamPenalties = game.TeamPenalties(game.AwayTeamId);
+                                            }
+
+                                            <div class="col-md-6">
+                                                @Html.Partial("TeamPenalties", new TeamPenaltiesModel { Team = game.HomeTeam, Penalties = homeTeamPenalties })
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                @Html.Partial("TeamPenalties", new TeamPenaltiesModel { Team = game.AwayTeam, Penalties = awayTeamPenalties })
+                                            </div>
+                                        </div>
                                     </div>
                                 }
                             </div>

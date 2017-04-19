@@ -1,0 +1,17 @@
+﻿@model TeamPenaltiesModel
+
+<h4 class="mb-2 mt-2">@Model.Team.Name</h4>
+<ul class="list-group list-group-flush mt-2">
+    @if (!Model.Penalties.Any()) {
+        <li class="list-group-item"><span style="color: #444;">None</span></li>
+    }
+
+    @foreach (var penalty in Model.Penalties.OrderBy(p => p.Player.FirstName).ThenBy(p => p.Player.LastName)) {
+        <li class="list-group-item">
+            <span style="color: #444;">
+                <small><abbr class="p-1 @(penalty.Severity == PenaltyCardSeverity.Red ? "bg-danger text-white" : "bg-warning text-white")" data-toggle="tooltip" data-placement="top" title="@penalty.Title">@penalty.MisconductCode</abbr></small> :
+                @penalty.Player.FullName
+            </span>
+        </li>
+    }
+</ul>
