@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Minimal Application level overrides
  * (things that dont make sense in a toolkit :)
  * copyright @colossal 2015
@@ -151,4 +151,41 @@
 
 .auth0-lock-name {
     display: none;
+}
+
+::-webkit-input-placeholder {
+    color: #666 !important;
+    opacity: 0.5 !important;
+}
+
+::-moz-placeholder {
+    color: #666 !important;
+    opacity: 0.5 !important;
+}
+
+:-moz-placeholder {
+    color: #666 !important;
+    opacity: 0.5 !important;
+}
+
+:-ms-input-placeholder {
+    color: #666 !important;
+    opacity: 0.5 !important;
+}
+
+.nav-bordered > .nav-item > .app-roster-link:not(.collapsed) {
+    font-weight: 600;
+    color: #b2b74e;
+    border-bottom-color: #b2b74e;
+}
+
+.nav-bordered > .nav-item > .app-roster-link.collapsed {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.navbar-light .navbar-nav .nav-link,
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:focus {
+    font-weight: 600;
 }

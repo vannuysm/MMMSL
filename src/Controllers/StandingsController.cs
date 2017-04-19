@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using mmmsl.Models;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace mmmsl.Controllers
 {
-    public class TeamsController : Controller
+    public class StandingsController : Controller
     {
         private readonly MmmslDatabase database;
 
-        public TeamsController(MmmslDatabase database)
+        public StandingsController(MmmslDatabase database)
         {
             this.database = database;
         }
@@ -24,16 +23,8 @@ namespace mmmsl.Controllers
                 return NotFound();
             }
 
-            var teams = await database.Teams
-                .Where(team => team.DivisionId == divisionId)
-                .Include(team => team.Manager)
-                .Include(team => team.Roster)
-                .OrderBy(team => team.Name)
-                .ToListAsync();
-
-            return View(new TeamsIndexModel {
-                Division = division,
-                Teams = teams
+            return View(new StandingsIndexModel {
+                Division = division
             });
         }
     }

@@ -1,8 +1,8 @@
-<li class="nav-item">
+﻿<li class="nav-item">
     @if (User.Identity.IsAuthenticated) {
         <a class="nav-link" asp-controller="Account" asp-action="Logout"><span class="icon icon-log-out"></span></a>
     }
     else {
-        <a id="login" class="nav-link" href="#login"><span class="icon icon-login"></span></a>
+        <a class="nav-link" asp-controller="Account" asp-action="Login"><span class="icon icon-login"></span></a>
     }
 </li>
