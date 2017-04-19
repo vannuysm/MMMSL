@@ -8,9 +8,10 @@ using mmmsl.Models;
 namespace mmmsl.Migrations
 {
     [DbContext(typeof(MmmslDatabase))]
-    partial class MmmslDatabaseModelSnapshot : ModelSnapshot
+    [Migration("20170419002350_Rosters")]
+    partial class Rosters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

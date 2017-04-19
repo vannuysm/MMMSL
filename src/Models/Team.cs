@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace mmmsl.Models
@@ -17,5 +18,6 @@ namespace mmmsl.Models
         [Range(1, int.MaxValue, ErrorMessage = "You must specify a team manager.")]
         public int ManagerId { get; set; }
         public Profile Manager { get; set; }
+        public List<RosterPlayer> Roster { get; set; }
     }
 }

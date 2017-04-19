@@ -1,0 +1,21 @@
+@model TeamsIndexModel
+@{
+    ViewData["Title"] = $"{Model.Division.Name} Teams";
+}
+
+@foreach (var chunk in Model.Teams) {
+    <div class="card-deck mb-3">
+        @foreach (var team in chunk) {
+            <div class="card card-inverse app-card-game mb-2">
+                <div class="card-block">
+                    <div class="d-flex justify-content-between card-title">
+                        <h4 class="text-primary mb-0">
+                            @team.Name
+                        </h4>
+                        <small class="align-self-center text-white">@team.Manager.FullName</small>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

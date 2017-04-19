@@ -19,6 +19,10 @@ namespace mmmsl.Controllers
 
         public async Task<IActionResult> Index(string divisionId)
         {
+            if (string.IsNullOrEmpty(divisionId)) {
+                return NotFound();
+            }
+
             var games = await database.Games
                 .Where(game => game.DivisionId == divisionId)
                 .Include(game => game.AwayTeam)
