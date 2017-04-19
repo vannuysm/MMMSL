@@ -43,6 +43,8 @@ namespace mmmsl.Migrations
 
                     b.Property<int>("HomeTeamId");
 
+                    b.Property<int>("Status");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AwayTeamId");
@@ -76,6 +78,39 @@ namespace mmmsl.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("Goals");
+                });
+
+            modelBuilder.Entity("mmmsl.Models.Penalty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("GameId");
+
+                    b.Property<string>("MisconductCode");
+
+                    b.Property<int>("PlayerId");
+
+                    b.Property<int>("Points");
+
+                    b.Property<int>("Severity");
+
+                    b.Property<int>("TeamId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("MisconductCode")
+                        .IsUnique();
+
+                    b.HasIndex("PlayerId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("Penalties");
                 });
 
             modelBuilder.Entity("mmmsl.Models.Profile", b =>
@@ -164,6 +199,21 @@ namespace mmmsl.Migrations
                 {
                     b.HasOne("mmmsl.Models.Game", "Game")
                         .WithMany("Goals")
+                        .HasForeignKey("GameId");
+
+                    b.HasOne("mmmsl.Models.Profile", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerId");
+
+                    b.HasOne("mmmsl.Models.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId");
+                });
+
+            modelBuilder.Entity("mmmsl.Models.Penalty", b =>
+                {
+                    b.HasOne("mmmsl.Models.Game", "Game")
+                        .WithMany("Penalties")
                         .HasForeignKey("GameId");
 
                     b.HasOne("mmmsl.Models.Profile", "Player")

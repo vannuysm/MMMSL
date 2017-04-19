@@ -1,14 +1,16 @@
-﻿[*]
-end_of_line = crlf
-indent_style = space
-indent_size = 4
+﻿root = true
+
+[*]
 charset = utf-8
+end_of_line = crlf
+indent_size = 4
+indent_style = space
 
 [*.cs]
-dotnet_sort_system_directives_first = true
-csharp_style_var_for_built_in_types = true:suggestion
-csharp_style_var_elsewhere = true:suggestion
-csharp_new_line_before_open_brace = types,methods:warning
 csharp_new_line_before_catch = true
 csharp_new_line_before_else = true
 csharp_new_line_before_finally = true
+csharp_new_line_before_open_brace = methods,types
+csharp_style_var_elsewhere = true:suggestion
+csharp_style_var_for_built_in_types = true:suggestion
+dotnet_sort_system_directives_first = true

@@ -1,7 +1,6 @@
-@model Schedule
+﻿@model Schedule
 @{
     ViewData["Title"] = $"{Model.Division.Name} Schedule";
-    var rand = new Random();
 }
 
 @if (!Model.Entries.Any()) {
@@ -20,8 +19,6 @@
 
         <div class="card-deck mb-3">
             @foreach(var game in gameGroup) {
-                var homeGoals = rand.Next(0, 10);
-                var awayGoals = rand.Next(0, 10);
                 <div class="card card-inverse app-card-game mb-2">
                     <div class="card-block">
                         <h4 class="card-title text-primary">
@@ -29,28 +26,49 @@
                             <small class="text-info">Field A</small>
                         </h4>
 
-                        <ul class="nav nav-bordered">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#goal-summary-@(game.Id)">Goals <span class="badge badge-default">@(homeGoals + awayGoals)</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#penalty-summary-@(game.Id)">Penalties <span class="badge badge-default">@(rand.Next(0, 5))</span></a>
-                            </li>
-                        </ul>
+                        @if (game.Status == GameStatus.Played) {
+                            <ul class="nav nav-bordered">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#goal-summary-@(game.Id)">Goals</a>
+                                </li>
 
-                        <div class="tab-content mt-2">
-                            <div class="tab-pane active" id="goal-summary-@(game.Id)" role="tabpanel">Goal Summary Here</div>
-                            <div class="tab-pane" id="penalty-summary-@(game.Id)" role="tabpanel">Penalty Summary Here</div>
+                                @if (game.Penalties.Any()) {
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#penalty-summary-@(game.Id)">
+                                            Penalties
+                                            <span class="badge badge-default ml-1">0</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+
+                            <div class="tab-content mt-2">
+                                <div class="tab-pane active" id="goal-summary-@(game.Id)" role="tabpanel">
+                                    @if (!game.Goals.Any()) {
+                                        <p>Lots of running, no production.</p>
+                                    }
+                                </div>
+                            
+                                @if (game.Penalties.Any()) {
+                                    <div class="tab-pane" id="penalty-summary-@(game.Id)" role="tabpanel">
+                                        @Html.Partial("TeamPenalties", new TeamPenaltiesModel {
+                                            Team = game.HomeTeam,
+                                            Penalties = game.TeamPenalties(game.HomeTeamId)
+                                        })
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                    
+                    @if (game.Status == GameStatus.Played) {
+                        <div class="statcard p-3 mb-0 text-right">
+                            <span class="statcard-desc text-primary">Final Score</span>
+                            <h3 class="statcard-number">
+                                @(game.TeamGoalTotal(game.HomeTeamId)) - @(game.TeamGoalTotal(game.AwayTeamId))
+                            </h3>
                         </div>
-                    </div>
-
-                    <div class="statcard p-3 mb-0 text-right">
-                        <span class="statcard-desc text-primary">Final Score</span>
-                        <h3 class="statcard-number">
-                            @(homeGoals) - @(awayGoals)
-                            @* @(game.TeamGoalTotal(game.HomeTeamId)) - @(game.TeamGoalTotal(game.AwayTeamId)) *@
-                        </h3>
-                    </div>
+                    }
                 </div>
             }
         </div>

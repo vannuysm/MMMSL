@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -9,12 +9,13 @@ namespace mmmsl.Models
         public MmmslDatabase(DbContextOptions<MmmslDatabase> options)
             : base(options)
         {
-            this.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         public DbSet<Division> Divisions { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Goal> Goals { get; set; }
+        public DbSet<Penalty> Penalties { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<RosterPlayer> RosterPlayers { get; set; }
@@ -22,6 +23,23 @@ namespace mmmsl.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Penalty>()
+                .HasIndex(penalty => penalty.MisconductCode)
+                .IsUnique();
+
+            modelBuilder.Entity<Profile>()
+                .HasIndex(profile => profile.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<Role>().HasKey(role => new {
+                role.ProfileId,
+                role.Name
+            });
+
+            modelBuilder.Entity<Role>()
+                .HasOne<Profile>()
+                .WithMany(profile => profile.Roles);
+
             modelBuilder.Entity<RosterPlayer>().HasKey(rp => new {
                 rp.ProfileId,
                 rp.TeamId
@@ -37,19 +55,6 @@ namespace mmmsl.Models
                 .WithMany(team => team.Roster)
                 .HasForeignKey(rp => rp.TeamId);
 
-            modelBuilder.Entity<Profile>()
-                .HasIndex(profile => profile.Email)
-                .IsUnique();
-
-            modelBuilder.Entity<Role>().HasKey(role => new {
-                role.ProfileId,
-                role.Name
-            });
-
-            modelBuilder.Entity<Role>()
-                .HasOne<Profile>()
-                .WithMany(profile => profile.Roles);
-            
             var foreignKeys = modelBuilder.Model
                 .GetEntityTypes()
                 .SelectMany(e => e.GetForeignKeys());

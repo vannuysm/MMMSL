@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,6 +27,10 @@ namespace mmmsl.Controllers
                 .Where(game => game.DivisionId == divisionId)
                 .Include(game => game.AwayTeam)
                 .Include(game => game.HomeTeam)
+                .Include(game => game.Goals)
+                .ThenInclude(goal => goal.Player)
+                .Include(game => game.Penalties)
+                .ThenInclude(penalty => penalty.Player)
                 .OrderBy(game => game.DateAndTime)
                 .ToListAsync();
 
