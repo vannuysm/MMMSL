@@ -23,7 +23,7 @@
                     <div class="card app-card-schedule mb-2">
                         <div class="card-block">
                             <h4 class="card-title text-primary">
-                                @game.HomeTeam.Name vs @game.AwayTeam.Name<br/>
+                                <span class="font-weight-bold">@game.HomeTeam.Name vs @game.AwayTeam.Name</span><br/>
                                 <small class="text-info">Field A</small>
                             </h4>
 
@@ -90,7 +90,7 @@
                     
                         @if (game.Status == GameStatus.Played) {
                             <div class="card-footer statcard text-right">
-                                <span class="statcard-desc text-primary">Final Score</span>
+                                <span class="statcard-desc text-primary font-weight-bold">Final Score</span>
                                 <h3 class="statcard-number">
                                     @(game.TeamGoalTotal(game.HomeTeamId)) - @(game.TeamGoalTotal(game.AwayTeamId))
                                 </h3>

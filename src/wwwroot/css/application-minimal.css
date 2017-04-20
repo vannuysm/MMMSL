@@ -220,3 +220,7 @@
 .text-default {
     color: #494e55;
 }
+
+.font-weight-bold {
+    font-weight: 600;
+}
