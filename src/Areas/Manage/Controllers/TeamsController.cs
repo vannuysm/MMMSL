@@ -63,7 +63,7 @@ namespace mmmsl.Areas.Manage.Controllers
         {
             var team = await database.Teams
                 .Include(t => t.Division)
-                .SingleOrDefaultAsync(p => p.Id == id);
+                .SingleOrDefaultAsync(t => t.Id == id);
 
             if (team == null) {
                 return NotFound();
@@ -124,6 +124,25 @@ namespace mmmsl.Areas.Manage.Controllers
             }
 
             return RedirectToAction("Index", new { id = divisionId });
+        }
+
+        [Route("manage/teams/{id}/json")]
+        public async Task<IActionResult> GetTeamsSelectList(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id)) {
+                return BadRequest();
+            }
+
+            var teams = await database.Teams
+                .Where(team => team.DivisionId == id)
+                .OrderBy(team => team.Name)
+                .Select(team => new SelectListItem {
+                    Value = team.Id.ToString(),
+                    Text = team.Name
+                })
+                .ToListAsync();
+
+            return Json(teams);
         }
 
         private async Task<EditTeamModel> CreateEditTeamModelAsync(Team team = null)

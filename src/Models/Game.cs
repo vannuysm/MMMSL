@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using mmmsl.Attributes;
 
 namespace mmmsl.Models
 {
@@ -18,13 +19,15 @@ namespace mmmsl.Models
         public int Id { get; set; }
 
         [Required]
-        public DateTimeOffset DateAndTime { get; set; }
+        public DateTimeOffset DateAndTime { get; set; } = DateTime.Today;
 
         [Required]
+        [NotEqual(nameof(AwayTeamId), ErrorMessage = "Home Team must be different than Away Team")]
         public int HomeTeamId { get; set; }
         public Team HomeTeam { get; set; }
 
         [Required]
+        [NotEqual(nameof(HomeTeamId), ErrorMessage = "Away Team must be different than Home Team")]
         public int AwayTeamId { get; set; }
         public Team AwayTeam { get; set; }
 

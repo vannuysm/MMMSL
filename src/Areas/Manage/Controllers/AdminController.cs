@@ -11,10 +11,17 @@ namespace mmmsl.Areas.Manage.Controllers
 
         protected IActionResult PaginatedIndex<T>(PaginatedList<T> list)
         {
-            if (list.PageIndex > list.TotalPages) {
+            if (list.TotalPages > 0 && list.PageIndex > list.TotalPages) {
                 return RedirectToAction("Index", new {
                     id = ControllerContext.RouteData.Values["id"],
                     page = list.TotalPages
+                });
+            }
+
+            if (list.PageIndex < 1) {
+                return RedirectToAction("Index", new {
+                    id = ControllerContext.RouteData.Values["id"],
+                    page = 1
                 });
             }
 
