@@ -1,0 +1,31 @@
+﻿@model EditGoalModel
+
+<form class="form-inline mb-4" asp-action="Goal" asp-route-id="@Model.Game.Id" method="post">
+    <fieldset>
+        <legend>Goals</legend>
+
+        <select asp-for="PlayerId" asp-items="Model.Players" class="form-control"></select>
+        <input asp-for="Count" class="form-control" min="1" placeholder="# of Goals" />
+        <button type="submit" class="btn btn-success"><span class="icon icon-save"></span> Save</button>
+    </fieldset>
+                
+    <input name="TeamId" type="hidden" value="@Model.TeamId" />
+</form>
+
+<ul class="list-group list-group-flush">
+    @if (Model.Game.TeamGoalTotal(Model.TeamId) == 0) {
+        <li class="list-group-item">
+            <p class="card-text">
+                <span class="icon icon-emoji-sad mr-1"></span>
+                None
+            </p>
+        </li>
+    }
+
+    @foreach (var goal in Model.Game.TeamGoals(Model.TeamId).OrderByDescending(g => g.Count)) {
+        <li class="list-group-item">
+            <span class="badge badge-default mr-2">@goal.Count</span>
+            @goal.Player.FullName
+        </li>
+    }
+</ul>

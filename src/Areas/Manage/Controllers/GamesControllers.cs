@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using mmmsl.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using mmmsl.Areas.Manage.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 
 namespace mmmsl.Areas.Manage.Controllers
 {
@@ -38,11 +39,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
         public async Task<IActionResult> Create(string divisionId)
         {
-            var model = await CreateEditGameModelAsync(new Game {
-                DivisionId = divisionId
-            });
-
-            return View(model);
+            return View(await CreateEditGameModelAsync(new Game { DivisionId = divisionId }));
         }
 
         [HttpPost]
@@ -72,9 +69,8 @@ namespace mmmsl.Areas.Manage.Controllers
             if (game == null) {
                 return NotFound();
             }
-
-            var model = await CreateEditGameModelAsync(game);
-            return View(model);
+            
+            return View(await CreateEditGameModelAsync(game));
         }
 
         [HttpPost, ActionName("Edit")]
@@ -91,12 +87,13 @@ namespace mmmsl.Areas.Manage.Controllers
                 return NotFound();
             }
             
-            var didModelUpdate = await TryUpdateModelAsync<Game>(gameToUpdate, "Game",
+            var didModelUpdate = await TryUpdateModelAsync(gameToUpdate, "Game",
                 g => g.Id,
                 g => g.DivisionId,
                 g => g.HomeTeamId,
                 g => g.AwayTeamId,
-                g => g.DateAndTime);
+                g => g.DateAndTime,
+                g => g.Status);
 
             if (didModelUpdate) {
                 try {
@@ -132,6 +129,65 @@ namespace mmmsl.Areas.Manage.Controllers
             return RedirectToAction("Index", new { id = divisionId });
         }
 
+        public async Task<IActionResult> Result(int id)
+        {
+            var game = await database.Games
+                   .Include(g => g.HomeTeam)
+                   .Include(g => g.AwayTeam)
+                   .Include(g => g.Goals)
+                   .ThenInclude(g => g.Player)
+                   .Include(g => g.Penalties)
+                   .ThenInclude(p => p.Player)
+                   .SingleOrDefaultAsync(g => g.Id == id);
+
+            if (game == null) {
+                return NotFound();
+            }
+            
+            return View(await CreateEditGameResultModelAsync(game));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Goal(int id, EditGoalModel model)
+        {
+            database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+
+            var game = await database.Games
+                   .Include(g => g.HomeTeam)
+                   .Include(g => g.AwayTeam)
+                   .Include(g => g.Goals)
+                   .ThenInclude(g => g.Player)
+                   .SingleOrDefaultAsync(g => g.Id == id);
+
+            if (game == null) {
+                return NotFound();
+            }
+            
+            if (game.Goals.Any(g => g.PlayerId == model.PlayerId)) {
+                var goal = game.Goals.Single(g => g.PlayerId == model.PlayerId);
+                goal.Count = model.Count;
+            }
+            else {
+                game.Goals.Add(new Goal {
+                    GameId = id,
+                    TeamId = model.TeamId,
+                    PlayerId = model.PlayerId,
+                    Count = model.Count
+                });
+            }
+
+            try {
+                await database.SaveChangesAsync();
+            }
+            catch (DbUpdateException) {
+                ModelState.AddModelError("", ErrorMessages.Database);
+            }
+
+            var redirectUrl = Url.Action("Result", new { id = game.Id });
+            return Redirect($"{redirectUrl}#team-{model.TeamId}");
+        }
+
         private async Task<EditGameModel> CreateEditGameModelAsync(Game game = null)
         {
             var divisions = await database.Divisions
@@ -165,6 +221,28 @@ namespace mmmsl.Areas.Manage.Controllers
             }
 
             return model;
+        }
+
+        private async Task<EditGameResultModel> CreateEditGameResultModelAsync(Game game)
+        {
+            return new EditGameResultModel {
+                Game = game,
+                HomeTeamPlayers = await GetPlayerSelectList(game.HomeTeamId),
+                AwayTeamPlayers = await GetPlayerSelectList(game.AwayTeamId)
+            };
+        }
+
+        private async Task<List<SelectListItem>> GetPlayerSelectList(int teamId)
+        {
+            var team = await database.Teams
+                    .Include(t => t.Roster)
+                    .ThenInclude(t => t.Profile)
+                    .SingleAsync(t => t.Id == teamId);
+
+            return team.Roster.Select(roster => new SelectListItem {
+                Value = roster.Profile.Id.ToString(),
+                Text = roster.Profile.FullName
+            }).ToList();
         }
     }
 }

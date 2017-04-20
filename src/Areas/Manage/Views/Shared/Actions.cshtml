@@ -1,5 +1,22 @@
-<div class="app-actions text-right">
-    <a class="btn btn-sm btn-info" asp-action="Edit" asp-route-id="@Model.Id"><span class="icon icon-edit"></span> Edit</a>
+﻿<div class="app-actions text-right">
+    @if (Model.GetType() == typeof(Game)) {
+        <div class="btn-group">
+            <div class="dropdown">
+                <button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="icon icon-edit"></span> Edit
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.Id">Schedule</a>
+                    <a class="dropdown-item" asp-action="Result" asp-route-id="@Model.Id">Result</a>
+                </div>
+            </div>
+        </div>
+    }
+    else {
+        <a class="btn btn-sm btn-info" asp-action="Edit" asp-route-id="@Model.Id"><span class="icon icon-edit"></span> Edit</a>
+    }
+
     <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@Model.Id" data-toggle="modal" data-target="#delete-confirmation-@(Model.Id)"><span class="icon icon-erase"></span> Delete</button>
 
     <div class="modal fade" id="delete-confirmation-@(Model.Id)" tabindex="-1" role="dialog" aria-labelledby="delete-confirmation-title-@(Model.Id)" aria-hidden="true">

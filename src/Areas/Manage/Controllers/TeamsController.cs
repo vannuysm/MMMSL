@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using mmmsl.Areas.Manage.Models;
@@ -126,23 +126,19 @@ namespace mmmsl.Areas.Manage.Controllers
             return RedirectToAction("Index", new { id = divisionId });
         }
 
-        [Route("manage/teams/{id}/json")]
-        public async Task<IActionResult> GetTeamsSelectList(string id)
+        [Route("manage/teams/{id}/players/json")]
+        public async Task<IActionResult> GetPlayers(int id)
         {
-            if (string.IsNullOrWhiteSpace(id)) {
+            if (id == 0) {
                 return BadRequest();
             }
 
-            var teams = await database.Teams
-                .Where(team => team.DivisionId == id)
-                .OrderBy(team => team.Name)
-                .Select(team => new SelectListItem {
-                    Value = team.Id.ToString(),
-                    Text = team.Name
-                })
-                .ToListAsync();
-
-            return Json(teams);
+            var team = await database.Teams
+                .Include(t => t.Roster)
+                .ThenInclude(roster => roster.Profile)
+                .SingleOrDefaultAsync(t => t.Id == id);
+            
+            return Json(team.Roster.Select(roster => roster.Profile));
         }
 
         private async Task<EditTeamModel> CreateEditTeamModelAsync(Team team = null)

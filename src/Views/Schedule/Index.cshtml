@@ -20,7 +20,7 @@
         <div class="row mb-3">
             @foreach(var game in gameGroup) {
                 <div class="col-sm-6">
-                    <div class="card app-card-schedule mb-2">
+                    <div class="card app-card-schedule mb-2 @(game.Status == GameStatus.Played ? "h-100" : "")">
                         <div class="card-block">
                             <h4 class="card-title text-primary font-weight-bold">
                                 @game.HomeTeam.Name vs @game.AwayTeam.Name<br/>
