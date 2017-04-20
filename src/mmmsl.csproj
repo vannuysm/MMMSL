@@ -3,6 +3,10 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="wwwroot\js\manage-teams.js" />
+    <Content Include="wwwroot\js\manage-teams.min.js" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.4.337" />
     <PackageReference Include="Humanizer.Core" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />

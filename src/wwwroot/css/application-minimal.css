@@ -140,8 +140,32 @@
     border-color: rgba(204, 204, 204, 0.5);
 }
 
+.app-penalty-card-yellow, .app-penalty-card-red {
+    border-radius: 0.25rem;
+}
+
+.app-penalty-card-yellow {
+    background-color: #fcf8e3;
+    border: 1px solid #8a6d3b !important;
+    color: #8a6d3b;
+}
+
+.app-penalty-card-red {
+    background-color: #f2dede;
+    border: 1px solid #a94442 !important;
+    color: #a94442;
+}
+
+.app-card-schedule .list-group-item {
+    padding: 0.5rem 0.25rem 0 0.25rem;
+}
+
+.app-card-schedule .list-group-item:not(:first-child) {
+    border-top: 0;
+}
+
 .validation-summary-errors > ul {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .dropdown-toggle.app-user-profile::after {

@@ -3,7 +3,7 @@
 <h4 class="mb-2 mt-2">@Model.Team.Name</h4>
 <ul class="list-group list-group-flush mt-2 text-default">
     @if (!Model.Penalties.Any()) {
-        <li class="list-group-item pl-2 pr-2">
+        <li class="list-group-item">
             <p class="card-text">
                 <span class="icon icon-emoji-happy mr-1"></span>
                 None
@@ -12,8 +12,8 @@
     }
 
     @foreach (var penalty in Model.Penalties.OrderBy(p => p.Player.FirstName).ThenBy(p => p.Player.LastName)) {
-        <li class="list-group-item pl-2 pr-2 @(penalty.Severity == PenaltyCardSeverity.Red ? "list-group-item-danger" : "list-group-item-warning")">
-            <small><abbr class="p-1 @(penalty.Severity == PenaltyCardSeverity.Red ? "bg-danger text-white" : "bg-warning text-white")" data-toggle="tooltip" data-placement="top" title="@penalty.Title">@penalty.MisconductCode</abbr></small> :
+        <li class="list-group-item">
+            <small><abbr class="p-1 mr-1 @(penalty.Severity == PenaltyCardSeverity.Red ? "app-penalty-card-red" : "app-penalty-card-yellow")" data-toggle="tooltip" data-placement="top" title="@penalty.Title">@penalty.MisconductCode</abbr></small>
             @penalty.Player.FullName
         </li>
     }
