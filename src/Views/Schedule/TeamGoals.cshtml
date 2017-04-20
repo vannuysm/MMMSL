@@ -1,15 +1,20 @@
 ﻿@model TeamGoalsModel
 
 <h4 class="mb-2 mt-2">@Model.Team.Name</h4>
-<ul class="list-group list-group-flush mt-2">
+<ul class="list-group list-group-flush mt-2 text-default">
     @if (!Model.Goals.Any()) {
-        <li class="list-group-item"><span style="color: #444;">None</span></li>
+        <li class="list-group-item pl-1 pr-1">
+            <p class="card-text">
+                <span class="icon icon-emoji-sad mr-1"></span>
+                None
+            </p>
+        </li>
     }
 
     @foreach (var goal in Model.Goals.OrderByDescending(g => g.Count)) {
-        <li class="list-group-item">
-            <span class="badge badge-default mr-1">@goal.Count</span>
-            <span style="color: #444;">@goal.Player.FullName</span>
+        <li class="list-group-item pl-1 pr-1">
+            <span class="badge badge-default mr-2">@goal.Count</span>
+            @goal.Player.FullName
         </li>
     }
 </ul>

@@ -17,84 +17,86 @@
             @(gameGroup.Key.ToString("h:mm tt"))
         </h3>
 
-        <div class="card-deck mb-3">
+        <div class="row mb-3">
             @foreach(var game in gameGroup) {
-                <div class="card card-inverse app-card-game mb-2">
-                    <div class="card-block">
-                        <h4 class="card-title text-primary">
-                            @game.HomeTeam.Name vs @game.AwayTeam.Name<br/>
-                            <small class="text-info">Field A</small>
-                        </h4>
+                <div class="col-sm-6">
+                    <div class="card app-card-schedule mb-2">
+                        <div class="card-block">
+                            <h4 class="card-title text-primary">
+                                @game.HomeTeam.Name vs @game.AwayTeam.Name<br/>
+                                <small class="text-info">Field A</small>
+                            </h4>
 
-                        @if (game.Status == GameStatus.Played) {
-                            <ul class="nav nav-bordered">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#goal-summary-@(game.Id)">Goals</a>
-                                </li>
-
-                                @if (game.Penalties.Any()) {
+                            @if (game.Status == GameStatus.Played) {
+                                <ul class="nav nav-bordered">
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#penalty-summary-@(game.Id)">
-                                            Penalties
-                                            <span class="badge badge-default ml-1">@game.Penalties.Count</span>
-                                        </a>
+                                        <a class="nav-link active" data-toggle="tab" href="#goal-summary-@(game.Id)">Goals</a>
                                     </li>
-                                }
-                            </ul>
 
-                            <div class="tab-content mt-2">
-                                <div class="tab-pane active" id="goal-summary-@(game.Id)" role="tabpanel">
-                                    @if (!game.Goals.Any()) {
-                                        <p>Lots of running, no production.</p>
+                                    @if (game.Penalties.Any()) {
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#penalty-summary-@(game.Id)">
+                                                Penalties
+                                                <span class="badge badge-default ml-1">@game.Penalties.Count</span>
+                                            </a>
+                                        </li>
                                     }
-                                    else {
-                                        <div class="row">
-                                            @{
-                                                var homeTeamGoals = game.TeamGoals(game.HomeTeamId);
-                                                var awayTeamGoals = game.TeamGoals(game.AwayTeamId);
-                                            }
+                                </ul>
 
-                                            <div class="col-md-6">
-                                                @Html.Partial("TeamGoals", new TeamGoalsModel { Team = game.HomeTeam, Goals = homeTeamGoals })
-                                            </div>
+                                <div class="tab-content mt-2">
+                                    <div class="tab-pane active" id="goal-summary-@(game.Id)" role="tabpanel">
+                                        @if (!game.Goals.Any()) {
+                                            <p>Lots of running, no production.</p>
+                                        }
+                                        else {
+                                            <div class="row">
+                                                @{
+                                                    var homeTeamGoals = game.TeamGoals(game.HomeTeamId);
+                                                    var awayTeamGoals = game.TeamGoals(game.AwayTeamId);
+                                                }
+
+                                                <div class="col-sm-6">
+                                                    @Html.Partial("TeamGoals", new TeamGoalsModel { Team = game.HomeTeam, Goals = homeTeamGoals })
+                                                </div>
                                             
-                                            <div class="col-md-6">
-                                                @Html.Partial("TeamGoals", new TeamGoalsModel { Team = game.AwayTeam, Goals = awayTeamGoals })
+                                                <div class="col-sm-6">
+                                                    @Html.Partial("TeamGoals", new TeamGoalsModel { Team = game.AwayTeam, Goals = awayTeamGoals })
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                            
+                                    @if (game.Penalties.Any()) {
+                                        <div class="tab-pane" id="penalty-summary-@(game.Id)" role="tabpanel">
+                                            <div class="row">
+                                                @{
+                                                    var homeTeamPenalties = game.TeamPenalties(game.HomeTeamId);
+                                                    var awayTeamPenalties = game.TeamPenalties(game.AwayTeamId);
+                                                }
+
+                                                <div class="col-sm-6">
+                                                    @Html.Partial("TeamPenalties", new TeamPenaltiesModel { Team = game.HomeTeam, Penalties = homeTeamPenalties })
+                                                </div>
+                                            
+                                                <div class="col-sm-6">
+                                                    @Html.Partial("TeamPenalties", new TeamPenaltiesModel { Team = game.AwayTeam, Penalties = awayTeamPenalties })
+                                                </div>
                                             </div>
                                         </div>
                                     }
                                 </div>
-                            
-                                @if (game.Penalties.Any()) {
-                                    <div class="tab-pane" id="penalty-summary-@(game.Id)" role="tabpanel">
-                                        <div class="row">
-                                            @{
-                                                var homeTeamPenalties = game.TeamPenalties(game.HomeTeamId);
-                                                var awayTeamPenalties = game.TeamPenalties(game.AwayTeamId);
-                                            }
-
-                                            <div class="col-md-6">
-                                                @Html.Partial("TeamPenalties", new TeamPenaltiesModel { Team = game.HomeTeam, Penalties = homeTeamPenalties })
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                @Html.Partial("TeamPenalties", new TeamPenaltiesModel { Team = game.AwayTeam, Penalties = awayTeamPenalties })
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
+                            }
+                        </div>
+                    
+                        @if (game.Status == GameStatus.Played) {
+                            <div class="card-footer statcard text-right">
+                                <span class="statcard-desc text-primary">Final Score</span>
+                                <h3 class="statcard-number">
+                                    @(game.TeamGoalTotal(game.HomeTeamId)) - @(game.TeamGoalTotal(game.AwayTeamId))
+                                </h3>
                             </div>
                         }
                     </div>
-                    
-                    @if (game.Status == GameStatus.Played) {
-                        <div class="statcard p-3 mb-0 text-right">
-                            <span class="statcard-desc text-primary">Final Score</span>
-                            <h3 class="statcard-number">
-                                @(game.TeamGoalTotal(game.HomeTeamId)) - @(game.TeamGoalTotal(game.AwayTeamId))
-                            </h3>
-                        </div>
-                    }
                 </div>
             }
         </div>

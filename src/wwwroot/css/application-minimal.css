@@ -120,14 +120,9 @@
   margin-top: 2.5rem;
 }
 
-.app-card-game {
-  border-color: #444;
-  background-color: #444;
-}
-
 .app-logo {
-  height: 90px;
-  object-fit: contain;
+    height: 90px;
+    object-fit: contain;
 }
 
 .app-page-title {
@@ -135,6 +130,14 @@
   text-align: center;
   text-transform: uppercase;
   margin-bottom: 1.5rem;
+}
+
+.app-card-schedule {
+    border-color: rgba(204, 204, 204, 0.7);
+}
+
+.app-card-schedule .card-footer {
+    border-color: rgba(204, 204, 204, 0.5);
 }
 
 .validation-summary-errors > ul {
@@ -188,4 +191,8 @@
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link:focus {
     font-weight: 600;
+}
+
+.text-default {
+    color: #494e55;
 }
