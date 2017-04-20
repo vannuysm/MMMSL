@@ -22,13 +22,13 @@
                 <div class="col-sm-6">
                     <div class="card app-card-schedule mb-2">
                         <div class="card-block">
-                            <h4 class="card-title text-primary">
-                                <span class="font-weight-bold">@game.HomeTeam.Name vs @game.AwayTeam.Name</span><br/>
-                                <small class="text-info">Field A</small>
+                            <h4 class="card-title text-primary font-weight-bold">
+                                @game.HomeTeam.Name vs @game.AwayTeam.Name<br/>
+                                <span class="app-card-schedule-field">Field A</span>
                             </h4>
 
                             @if (game.Status == GameStatus.Played) {
-                                <ul class="nav nav-bordered">
+                                <ul class="nav nav-bordered app-nav-schedule-info">
                                     <li class="nav-item">
                                         <a class="nav-link active" data-toggle="tab" href="#goal-summary-@(game.Id)">Goals</a>
                                     </li>

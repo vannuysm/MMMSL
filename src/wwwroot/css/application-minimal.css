@@ -164,6 +164,16 @@
     border-top: 0;
 }
 
+.app-card-schedule-field {
+    font-size: 1rem;
+    color: #bbbbbb;
+    text-transform: uppercase;
+}
+
+.nav-bordered.app-nav-schedule-info > .nav-item > .nav-link.active {
+    color: #329ec9;
+}
+
 .validation-summary-errors > ul {
     margin-bottom: 0;
 }
