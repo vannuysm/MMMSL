@@ -1,6 +1,6 @@
 ﻿(function() {
     window.InitiateDivisionalTeamSelect = function () {
-        document.querySelector('.select-division-source').addEventListener('change', function (ev) {
+        document.querySelector('.select-division-source').addEventListener('input', function (ev) {
             var divisionId = ev.target.value;
             fetch(`/manage/divisions/${divisionId}/teams/json`, { credentials: 'same-origin' })
                 .then(function (response) { return response.json(); })

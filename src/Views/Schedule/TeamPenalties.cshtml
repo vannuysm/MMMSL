@@ -13,7 +13,7 @@
 
     @foreach (var penalty in Model.Penalties.OrderBy(p => p.Player.FirstName).ThenBy(p => p.Player.LastName)) {
         <li class="list-group-item">
-            <small><abbr class="p-1 mr-1 @(penalty.Severity == PenaltyCardSeverity.Red ? "app-penalty-card-red" : "app-penalty-card-yellow")" data-toggle="tooltip" data-placement="top" title="@penalty.Title">@penalty.MisconductCode</abbr></small>
+            <small><abbr class="p-1 mr-1 @(penalty.PenaltyCard.Severity == PenaltyCardSeverity.Red ? "app-penalty-card-red" : "app-penalty-card-yellow")" data-toggle="tooltip" data-placement="top" title="@penalty.PenaltyCard.Title">@penalty.MisconductCode</abbr></small>
             @penalty.Player.FullName
         </li>
     }

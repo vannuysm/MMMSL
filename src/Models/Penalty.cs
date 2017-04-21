@@ -2,7 +2,7 @@
 
 namespace mmmsl.Models
 {
-    public class Penalty : PenaltyCard
+    public class Penalty
     {
         public int Id { get; set; }
 
@@ -17,5 +17,8 @@ namespace mmmsl.Models
         [Required]
         public int PlayerId { get; set; }
         public Profile Player { get; set; }
+
+        public string MisconductCode { get; set; }
+        public PenaltyDefinition PenaltyCard { get; set; }
     }
 }

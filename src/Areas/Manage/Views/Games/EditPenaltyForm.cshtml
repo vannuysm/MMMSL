@@ -1,0 +1,32 @@
+﻿@model EditPenaltyModel
+
+<form class="form mb-4 mt-4" asp-action="Penalty" asp-route-id="@Model.Game.Id" method="post">
+    <fieldset>
+        <legend>Penalties</legend>
+            <div class="d-flex justify-content-between">
+                <select asp-for="PlayerId" asp-items="Model.Players" class="form-control mr-2"></select>
+                <select asp-for="MisconductCode" asp-items="Model.PenaltyCards" class="form-control mr-2"></select>
+                <button type="submit" class="btn btn-success"><span class="icon icon-save"></span> Save</button>
+            </div>
+    </fieldset>
+                
+    <input name="TeamId" type="hidden" value="@Model.TeamId" />
+</form>
+
+<ul class="list-group list-group-flush">
+    @if (!Model.Game.TeamPenalties(Model.TeamId).Any()) {
+        <li class="list-group-item">
+            <p class="card-text">
+                <span class="icon icon-emoji-happy mr-1"></span>
+                None
+            </p>
+        </li>
+    }
+
+    @foreach (var penalty in Model.Game.TeamPenalties(Model.TeamId).OrderBy(p => p.Player.FirstName).ThenBy(p => p.Player.LastName)) {
+        <li class="list-group-item">
+            <small><abbr class="p-1 mr-1 @(penalty.PenaltyCard.Severity == PenaltyCardSeverity.Red ? "app-penalty-card-red" : "app-penalty-card-yellow")" data-toggle="tooltip" data-placement="top" title="@penalty.PenaltyCard.Title">@penalty.MisconductCode</abbr></small>
+            @penalty.Player.FullName
+        </li>
+    }
+</ul>

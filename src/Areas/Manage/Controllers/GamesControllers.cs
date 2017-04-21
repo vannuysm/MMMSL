@@ -64,6 +64,9 @@ namespace mmmsl.Areas.Manage.Controllers
                 .Include(g => g.Division)
                 .Include(g => g.HomeTeam)
                 .Include(g => g.AwayTeam)
+                .Include(g => g.Goals).ThenInclude(g => g.Player)
+                .Include(g => g.Penalties).ThenInclude(g => g.Player)
+                .Include(g => g.Penalties).ThenInclude(g => g.PenaltyCard)
                 .SingleOrDefaultAsync(g => g.Id == id);
 
             if (game == null) {
@@ -129,24 +132,6 @@ namespace mmmsl.Areas.Manage.Controllers
             return RedirectToAction("Index", new { id = divisionId });
         }
 
-        public async Task<IActionResult> Result(int id)
-        {
-            var game = await database.Games
-                   .Include(g => g.HomeTeam)
-                   .Include(g => g.AwayTeam)
-                   .Include(g => g.Goals)
-                   .ThenInclude(g => g.Player)
-                   .Include(g => g.Penalties)
-                   .ThenInclude(p => p.Player)
-                   .SingleOrDefaultAsync(g => g.Id == id);
-
-            if (game == null) {
-                return NotFound();
-            }
-            
-            return View(await CreateEditGameResultModelAsync(game));
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Goal(int id, EditGoalModel model)
@@ -184,7 +169,42 @@ namespace mmmsl.Areas.Manage.Controllers
                 ModelState.AddModelError("", ErrorMessages.Database);
             }
 
-            var redirectUrl = Url.Action("Result", new { id = game.Id });
+            var redirectUrl = Url.Action("Edit", new { id = game.Id });
+            return Redirect($"{redirectUrl}#team-{model.TeamId}");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Penalty(int id, EditPenaltyModel model)
+        {
+            database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+
+            var game = await database.Games
+                   .Include(g => g.HomeTeam)
+                   .Include(g => g.AwayTeam)
+                   .Include(g => g.Penalties).ThenInclude(g => g.Player)
+                   .Include(g => g.Penalties).ThenInclude(g => g.PenaltyCard)
+                   .SingleOrDefaultAsync(g => g.Id == id);
+
+            if (game == null) {
+                return NotFound();
+            }
+            
+            game.Penalties.Add(new Penalty {
+                GameId = id,
+                TeamId = model.TeamId,
+                PlayerId = model.PlayerId,
+                MisconductCode = model.MisconductCode
+            });
+
+            try {
+                await database.SaveChangesAsync();
+            }
+            catch (DbUpdateException) {
+                ModelState.AddModelError("", ErrorMessages.Database);
+            }
+
+            var redirectUrl = Url.Action("Edit", new { id = game.Id });
             return Redirect($"{redirectUrl}#team-{model.TeamId}");
         }
 
@@ -220,16 +240,13 @@ namespace mmmsl.Areas.Manage.Controllers
                     .ToListAsync();
             }
 
-            return model;
-        }
+            if (game.Id > 0) {
+                model.HomeTeamPlayers = await GetPlayerSelectList(game.HomeTeamId);
+                model.AwayTeamPlayers = await GetPlayerSelectList(game.AwayTeamId);
+                model.PenaltyCards = await GetPenaltyCardSelectList();
+            }
 
-        private async Task<EditGameResultModel> CreateEditGameResultModelAsync(Game game)
-        {
-            return new EditGameResultModel {
-                Game = game,
-                HomeTeamPlayers = await GetPlayerSelectList(game.HomeTeamId),
-                AwayTeamPlayers = await GetPlayerSelectList(game.AwayTeamId)
-            };
+            return model;
         }
 
         private async Task<List<SelectListItem>> GetPlayerSelectList(int teamId)
@@ -244,5 +261,15 @@ namespace mmmsl.Areas.Manage.Controllers
                 Text = roster.Profile.FullName
             }).ToList();
         }
+
+        private async Task<List<SelectListItem>> GetPenaltyCardSelectList()
+        {
+            return await database.PenaltyDefinitions
+                .Select(pd => new SelectListItem {
+                    Value = pd.MisconductCode,
+                    Text = pd.Title
+                }).ToListAsync();
+        }
     }
 }
+ 

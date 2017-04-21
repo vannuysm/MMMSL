@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Linq;
 
 namespace mmmsl.Models
 {
@@ -16,6 +16,7 @@ namespace mmmsl.Models
         public DbSet<Game> Games { get; set; }
         public DbSet<Goal> Goals { get; set; }
         public DbSet<Penalty> Penalties { get; set; }
+        public DbSet<PenaltyDefinition> PenaltyDefinitions { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<RosterPlayer> RosterPlayers { get; set; }
@@ -24,8 +25,12 @@ namespace mmmsl.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Penalty>()
-                .HasIndex(penalty => penalty.MisconductCode)
-                .IsUnique();
+                .HasOne(penalty => penalty.PenaltyCard)
+                .WithMany()
+                .HasForeignKey(penalty => penalty.MisconductCode);
+
+            modelBuilder.Entity<PenaltyDefinition>()
+                .HasKey(penaltyDefinition => penaltyDefinition.MisconductCode);
 
             modelBuilder.Entity<Profile>()
                 .HasIndex(profile => profile.Email)

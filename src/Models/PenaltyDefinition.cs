@@ -6,7 +6,7 @@
         Red = 2
     }
 
-    public class PenaltyCard
+    public class PenaltyDefinition
     {
         public string MisconductCode { get; set; }
         public string Description { get; set; }

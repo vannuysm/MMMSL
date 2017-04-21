@@ -1,12 +1,14 @@
 ﻿@model EditGoalModel
 
-<form class="form-inline mb-4" asp-action="Goal" asp-route-id="@Model.Game.Id" method="post">
+<form class="form mb-4" asp-action="Goal" asp-route-id="@Model.Game.Id" method="post">
     <fieldset>
         <legend>Goals</legend>
-
-        <select asp-for="PlayerId" asp-items="Model.Players" class="form-control"></select>
-        <input asp-for="Count" class="form-control" min="1" placeholder="# of Goals" />
-        <button type="submit" class="btn btn-success"><span class="icon icon-save"></span> Save</button>
+        
+        <div class="d-flex justify-content-between">
+            <select asp-for="PlayerId" asp-items="Model.Players" class="form-control mr-2"></select>
+            <input asp-for="Count" class="form-control mr-2" min="1" placeholder="# of Goals" />
+            <button type="submit" class="btn btn-success"><span class="icon icon-save"></span> Save</button>
+        </div>
     </fieldset>
                 
     <input name="TeamId" type="hidden" value="@Model.TeamId" />

@@ -9,5 +9,19 @@
 
     $('a.nav-link').on('shown.bs.tab', function (e) {
         window.location.hash = e.target.hash;
-    })
+    });
+
+    var gameStatusElement = document.getElementById('Game_Status');
+    var gameResultForm = $('#game-result-form');
+
+    if (gameStatusElement != null && gameResultForm != null) {
+        gameStatusElement.addEventListener('input', function (ev) {
+            if (ev.target.value == 3) {
+                gameResultForm.collapse('show');
+            }
+            else {
+                gameResultForm.collapse('hide');
+            }
+        });
+    }
 })(jQuery);
