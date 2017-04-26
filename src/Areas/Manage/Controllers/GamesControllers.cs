@@ -34,7 +34,8 @@ namespace mmmsl.Areas.Manage.Controllers
                 .Include(game => game.AwayTeam)
                 .Include(game => game.Goals)
                 .Include(game => game.Field).ThenInclude(field => field.Location)
-                .OrderBy(game => game.DateAndTime);
+                .OrderBy(game => game.DateAndTime.Date)
+                .ThenBy(game => game.DateAndTime.TimeOfDay);
 
             return PaginatedIndex(await PaginatedList<Game>.CreateAsync(games, page ?? 1, DefaultPageSize));
         }
@@ -98,7 +99,8 @@ namespace mmmsl.Areas.Manage.Controllers
                 g => g.HomeTeamId,
                 g => g.AwayTeamId,
                 g => g.DateAndTime,
-                g => g.Status);
+                g => g.Status,
+                g => g.FieldId);
 
             if (didModelUpdate) {
                 try {
