@@ -5,6 +5,8 @@ using mmmsl.Areas.Manage.Models;
 using mmmsl.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System;
 
 namespace mmmsl.Areas.Manage.Controllers
 {
@@ -28,7 +30,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
             var teams = database.Teams
                 .Where(team => team.DivisionId == id)
-                .Include(team => team.Manager)
+                .Include(team => team.Managers).ThenInclude(manager => manager.Profile)
                 .OrderBy(team => team.Name);
 
             return PaginatedIndex(await PaginatedList<Team>.CreateAsync(teams, page ?? 1, DefaultPageSize));
@@ -45,15 +47,15 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Team team)
+        public async Task<IActionResult> Create(EditTeamModel model)
         {
-            var model = await CreateEditTeamModelAsync(team);
-
             if (!ModelState.IsValid) {
                 return View(model);
             }
 
-            await database.Teams.AddAsync(team);
+            UpdateTeamManagers(model.Managers, model.Team);
+
+            await database.Teams.AddAsync(model.Team);
             await database.SaveChangesAsync();
 
             return RedirectToAction("Index", new { id = model.Team.DivisionId });
@@ -63,6 +65,7 @@ namespace mmmsl.Areas.Manage.Controllers
         {
             var team = await database.Teams
                 .Include(t => t.Division)
+                .Include(t => t.Managers).ThenInclude(teamManager => teamManager.Profile)
                 .SingleOrDefaultAsync(t => t.Id == id);
 
             if (team == null) {
@@ -75,27 +78,27 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(int id)
+        public async Task<IActionResult> EditPost(int id, List<int> managers)
         {
             database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
             
             var teamToUpdate = await database.Teams
                 .Include(t => t.Division)
+                .Include(t => t.Managers)
                 .SingleOrDefaultAsync(p => p.Id == id);
 
             if (teamToUpdate == null) {
                 return NotFound();
             }
             
-            var didModelUpdate = await TryUpdateModelAsync<Team>(teamToUpdate, "Team",
-                t => t.Id,
-                t => t.Name,
-                t => t.ManagerId);
+            var didModelUpdate = await TryUpdateModelAsync(teamToUpdate, "Team", t => t.Name);
 
             if (didModelUpdate) {
+                UpdateTeamManagers(managers, teamToUpdate);
+
                 try {
                     await database.SaveChangesAsync();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { id = teamToUpdate.DivisionId });
                 }
                 catch (DbUpdateException) {
                     ModelState.AddModelError("", ErrorMessages.Database);
@@ -114,6 +117,7 @@ namespace mmmsl.Areas.Manage.Controllers
             if (teamToDelete == null) {
                 return RedirectToAction("Index");
             }
+
 
             try {
                 database.Teams.Remove(teamToDelete);
@@ -139,6 +143,36 @@ namespace mmmsl.Areas.Manage.Controllers
                 .SingleOrDefaultAsync(t => t.Id == id);
             
             return Json(team.Roster.Select(roster => roster.Profile));
+        }
+
+        private void UpdateTeamManagers(List<int> managers, Team team)
+        {
+            if (managers == null) {
+                team.Managers = new List<TeamManager>();
+                return;
+            }
+
+            var selectedManagers = new HashSet<int>(managers);
+            var currentManagers = new HashSet<int>(team.Managers.Select(teamManager => teamManager.ProfileId));
+
+            if (selectedManagers.SetEquals(currentManagers)) {
+                return;
+            }
+
+            team.Managers.RemoveAll(teamManager => {
+                return currentManagers.Contains(teamManager.ProfileId) && !selectedManagers.Contains(teamManager.ProfileId);
+            });
+
+            var managersToAdd = managers
+                .Where(manager => !currentManagers.Contains(manager))
+                .Select(manager => new TeamManager {
+                    ProfileId = manager,
+                    TeamId = team.Id
+                });
+
+            if (managersToAdd.Any()) {
+                team.Managers.AddRange(managersToAdd);
+            }
         }
 
         private async Task<EditTeamModel> CreateEditTeamModelAsync(Team team = null)

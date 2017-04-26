@@ -1,4 +1,4 @@
-@model PaginatedList<Team>
+﻿@model PaginatedList<Team>
 
 @{
     ViewData["Title"] = "Manage Teams";
@@ -15,7 +15,7 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Manager</th>
+            <th>Manager(s)</th>
             <th>@Html.Partial("CreateNew")</th>
         </tr>
     </thead>
@@ -25,12 +25,18 @@
             <tr>
                 <td>@team.Name</td>
                 <td>
-                    <div class="d-flex justify-content-between">
-                      <span>@team.Manager.FullName</span>
-                      @if (!string.IsNullOrWhiteSpace(team.Manager.Email)) {
-                        <a class="ml-2" href="mailto:@(team.Manager.Email)"><span class="icon icon-mail"></span></a>
-                      }
-                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li>
+                            @foreach (var manager in team.Managers) {
+                                <div class="d-flex justify-content-between">
+                                  <span>@manager.Profile.FullName</span>
+                                  @if (!string.IsNullOrWhiteSpace(manager.Profile.Email)) {
+                                    <a class="ml-2" href="mailto:@(manager.Profile.Email)"><span class="icon icon-mail"></span></a>
+                                  }
+                                </div>
+                            }
+                        </li>
+                    </ul>
                 </td>
                 <td>@Html.Partial("Actions", team)</td>
             </tr>

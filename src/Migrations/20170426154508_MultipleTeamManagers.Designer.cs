@@ -8,9 +8,10 @@ using mmmsl.Models;
 namespace mmmsl.Migrations
 {
     [DbContext(typeof(MmmslDatabase))]
-    partial class MmmslDatabaseModelSnapshot : ModelSnapshot
+    [Migration("20170426154508_MultipleTeamManagers")]
+    partial class MultipleTeamManagers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -258,13 +259,11 @@ namespace mmmsl.Migrations
                 {
                     b.HasOne("mmmsl.Models.Profile", "Profile")
                         .WithMany()
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProfileId");
 
                     b.HasOne("mmmsl.Models.Team", "Team")
                         .WithMany("Roster")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TeamId");
                 });
 
             modelBuilder.Entity("mmmsl.Models.Team", b =>
@@ -278,13 +277,11 @@ namespace mmmsl.Migrations
                 {
                     b.HasOne("mmmsl.Models.Profile", "Profile")
                         .WithMany()
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProfileId");
 
                     b.HasOne("mmmsl.Models.Team", "Team")
                         .WithMany("Managers")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TeamId");
                 });
         }
     }

@@ -101,7 +101,7 @@ namespace mmmsl.Areas.Manage.Controllers
             if (didModelUpdate) {
                 try {
                     await database.SaveChangesAsync();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { id = gameToUpdate.DivisionId });
                 }
                 catch (DbUpdateException) {
                     ModelState.AddModelError("", ErrorMessages.Database);

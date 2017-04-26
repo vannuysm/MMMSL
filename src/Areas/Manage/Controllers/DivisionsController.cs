@@ -71,7 +71,7 @@ namespace mmmsl.Areas.Manage.Controllers
                 return NotFound();
             }
             
-            var didModelUpdate = await TryUpdateModelAsync<Division>(divisionToUpdate, "",
+            var didModelUpdate = await TryUpdateModelAsync(divisionToUpdate, "",
                 d => d.Id,
                 d => d.Name);
 

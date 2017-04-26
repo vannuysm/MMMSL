@@ -8,9 +8,10 @@ using mmmsl.Models;
 namespace mmmsl.Migrations
 {
     [DbContext(typeof(MmmslDatabase))]
-    partial class MmmslDatabaseModelSnapshot : ModelSnapshot
+    [Migration("20170426201836_CascadeDeleteManyToMany")]
+    partial class CascadeDeleteManyToMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

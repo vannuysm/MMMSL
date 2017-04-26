@@ -17,6 +17,7 @@
     {
         "outputFileName": "wwwroot/js/site.min.js",
         "inputFiles": [
+            "wwwroot/js/polyfills.js",
             "wwwroot/js/toolkit.js",
             "wwwroot/js/application.js"
         ],
@@ -29,6 +30,7 @@
     {
         "outputFileName": "wwwroot/js/manage.min.js",
         "inputFiles": [
+            "wwwroot/js/polyfills.js",
             "wwwroot/js/toolkit.js",
             "wwwroot/js/application.js",
             "wwwroot/js/manage-games.js",

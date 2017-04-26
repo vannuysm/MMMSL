@@ -234,3 +234,7 @@
 .font-weight-bold {
     font-weight: 600;
 }
+
+.w-auto {
+    width: auto !important;
+}

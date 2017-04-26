@@ -8,7 +8,7 @@
     <div class="card mb-3">
         <div class="card-header d-flex justify-content-between align-items-baseline">
             <h2 class="h4 card-title mb-0">@team.Name</h2>
-            <h3 class="h6 card-subtitle mb-2 text-muted">@team.Manager.FullName</h3>
+            <h3 class="h6 card-subtitle mb-2 text-muted">@string.Join(", ", team.Managers.Select(m => m.Profile.FullName))</h3>
         </div>
         <div class="card-block">
             <ul class="nav nav-bordered">

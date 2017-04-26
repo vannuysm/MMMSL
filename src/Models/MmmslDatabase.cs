@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Linq;
+using System;
 
 namespace mmmsl.Models
 {
@@ -20,6 +21,7 @@ namespace mmmsl.Models
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<RosterPlayer> RosterPlayers { get; set; }
+        public DbSet<TeamManager> TeamManagers { get; set; }
         public DbSet<Team> Teams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -45,28 +47,50 @@ namespace mmmsl.Models
                 .HasOne<Profile>()
                 .WithMany(profile => profile.Roles);
 
-            modelBuilder.Entity<RosterPlayer>().HasKey(rp => new {
-                rp.ProfileId,
-                rp.TeamId
+            modelBuilder.Entity<TeamManager>().HasKey(manager => new {
+                manager.ProfileId,
+                manager.TeamId
+            });
+
+            modelBuilder.Entity<TeamManager>()
+                .HasOne(manager => manager.Profile)
+                .WithMany()
+                .HasForeignKey(manager => manager.ProfileId);
+
+            modelBuilder.Entity<TeamManager>()
+                .HasOne(manager => manager.Team)
+                .WithMany(team => team.Managers)
+                .HasForeignKey(manager => manager.TeamId);
+
+            modelBuilder.Entity<RosterPlayer>().HasKey(player => new {
+                player.ProfileId,
+                player.TeamId
             });
 
             modelBuilder.Entity<RosterPlayer>()
-                .HasOne(rp => rp.Profile)
+                .HasOne(player => player.Profile)
                 .WithMany()
-                .HasForeignKey(rp => rp.ProfileId);
+                .HasForeignKey(player => player.ProfileId);
 
             modelBuilder.Entity<RosterPlayer>()
-                .HasOne(rp => rp.Team)
+                .HasOne(player => player.Team)
                 .WithMany(team => team.Roster)
-                .HasForeignKey(rp => rp.TeamId);
+                .HasForeignKey(player => player.TeamId);
 
             var foreignKeys = modelBuilder.Model
                 .GetEntityTypes()
+                .Where(e => !EntityWhiteList(e.ClrType))
                 .SelectMany(e => e.GetForeignKeys());
 
             foreach (var relationship in foreignKeys) {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+        }
+
+        private bool EntityWhiteList(Type type)
+        {
+            return type == typeof(RosterPlayer)
+                || type == typeof(TeamManager);
         }
     }
 }
