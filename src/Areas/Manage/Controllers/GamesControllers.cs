@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using mmmsl.Areas.Manage.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System;
 
 namespace mmmsl.Areas.Manage.Controllers
 {
@@ -32,6 +33,7 @@ namespace mmmsl.Areas.Manage.Controllers
                 .Include(game => game.HomeTeam)
                 .Include(game => game.AwayTeam)
                 .Include(game => game.Goals)
+                .Include(game => game.Field).ThenInclude(field => field.Location)
                 .OrderBy(game => game.DateAndTime);
 
             return PaginatedIndex(await PaginatedList<Game>.CreateAsync(games, page ?? 1, DefaultPageSize));
@@ -226,7 +228,8 @@ namespace mmmsl.Areas.Manage.Controllers
             
             var model = new EditGameModel {
                 Game = game,
-                Divisions = divisions
+                Divisions = divisions,
+                Fields = await GetFieldSelectList()
             };
 
             if (!string.IsNullOrWhiteSpace(model.Game.DivisionId)) {
@@ -247,6 +250,20 @@ namespace mmmsl.Areas.Manage.Controllers
             }
 
             return model;
+        }
+
+        private async Task<List<SelectListItem>> GetFieldSelectList()
+        {
+            var fields = await database.Fields
+                .Include(field => field.Location)
+                .ToListAsync();
+
+            return fields
+                .OrderBy(field => field.Description)
+                .Select(field => new SelectListItem {
+                    Value = field.Id.ToString(),
+                    Text = field.Description
+                }).ToList();
         }
 
         private async Task<List<SelectListItem>> GetPlayerSelectList(int teamId)

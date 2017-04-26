@@ -17,6 +17,7 @@
             <th>Date/Time</th>
             <th>Home Team</th>
             <th>Away Team</th>
+            <th>Field</th>
             <th>@Html.Partial("CreateNew")</th>
         </tr>
     </thead>
@@ -27,6 +28,7 @@
                 <td>@(game.DateAndTime.ToString("yyyy-MM-dd hh:mm tt"))</td>
                 <td>@game.HomeTeam.Name</td>
                 <td>@game.AwayTeam.Name</td>
+                <td>@game.Field.Description</td>
                 <td>@Html.Partial("Actions", game)</td>
             </tr>
         }

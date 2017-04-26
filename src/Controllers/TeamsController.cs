@@ -27,7 +27,7 @@ namespace mmmsl.Controllers
             var teams = await database.Teams
                 .Where(team => team.DivisionId == divisionId)
                 .Include(team => team.Managers).ThenInclude(manager => manager.Profile)
-                .Include(team => team.Roster)
+                .Include(team => team.Roster).ThenInclude(player => player.Profile)
                 .OrderBy(team => team.Name)
                 .ToListAsync();
 

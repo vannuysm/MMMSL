@@ -14,5 +14,6 @@ namespace mmmsl.Areas.Manage.Models
         public List<SelectListItem> HomeTeamPlayers { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> AwayTeamPlayers { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> PenaltyCards { get; set; } = new List<SelectListItem>();
+        public List<SelectListItem> Fields { get; set; } = new List<SelectListItem>();
     }
 }

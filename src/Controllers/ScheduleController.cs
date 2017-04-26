@@ -27,6 +27,7 @@ namespace mmmsl.Controllers
                 .Where(game => game.DivisionId == divisionId)
                 .Include(game => game.AwayTeam)
                 .Include(game => game.HomeTeam)
+                .Include(game => game.Field).ThenInclude(field => field.Location)
                 .Include(game => game.Goals).ThenInclude(goal => goal.Player)
                 .Include(game => game.Penalties).ThenInclude(penalty => penalty.Player)
                 .Include(game => game.Penalties).ThenInclude(penalty => penalty.PenaltyCard)

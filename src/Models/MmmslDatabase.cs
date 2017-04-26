@@ -14,8 +14,10 @@ namespace mmmsl.Models
         }
 
         public DbSet<Division> Divisions { get; set; }
+        public DbSet<Field> Fields { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Goal> Goals { get; set; }
+        public DbSet<Location> Locations { get; set; }
         public DbSet<Penalty> Penalties { get; set; }
         public DbSet<PenaltyDefinition> PenaltyDefinitions { get; set; }
         public DbSet<Profile> Profiles { get; set; }

@@ -24,7 +24,7 @@
                         <div class="card-block">
                             <h4 class="card-title text-primary font-weight-bold">
                                 @game.HomeTeam.Name vs @game.AwayTeam.Name<br/>
-                                <span class="app-card-schedule-field">Field A</span>
+                                <span class="app-card-schedule-field">@game.Field?.Description</span>
                             </h4>
 
                             @if (game.Status == GameStatus.Played) {

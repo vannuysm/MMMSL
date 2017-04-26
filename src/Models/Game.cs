@@ -37,6 +37,8 @@ namespace mmmsl.Models
         public List<Goal> Goals { get; set; }
         public List<Penalty> Penalties { get; set; }
         public GameStatus Status { get; set; }
+        public int FieldId { get; set; }
+        public Field Field { get; set; }
 
         public int TeamGoalTotal(int teamId) => Goals?
             .Where(goal => goal.TeamId == teamId)

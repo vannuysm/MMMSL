@@ -21,9 +21,14 @@
                 @if (!team.Roster.Any()) {
                     <p class="card-text">No players are listed on this roster yet.</p>
                 }
-
-                @foreach (var player in team.Roster) {
-                    <p class="card-text">@player.Profile?.FullName</p>
+                else {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var player in team.Roster.OrderBy(p => p.Profile.FirstName).ThenBy(p => p.Profile.LastName)) {
+                            <li class="list-group-item">
+                                <p class="card-text">@player.Profile.FullName</p>
+                            </li>
+                        }
+                    </ul>
                 }
             </div>
         </div>
