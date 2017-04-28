@@ -31,7 +31,9 @@
                                 <div class="d-flex justify-content-between">
                                   <span>@manager.Profile.FullName</span>
                                   @if (!string.IsNullOrWhiteSpace(manager.Profile.Email)) {
-                                    <a class="ml-2" href="mailto:@(manager.Profile.Email)"><span class="icon icon-mail"></span></a>
+                                    <a class="ml-2" data-toggle="tooltip" href="mailto:@(manager.Profile.Email)" title="@manager.Profile.Email">
+                                        <span class="icon icon-mail"></span>
+                                    </a>
                                   }
                                 </div>
                             }
