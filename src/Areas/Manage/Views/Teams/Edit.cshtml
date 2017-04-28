@@ -10,7 +10,7 @@
     }
 
     <div class="form-group row">
-        <label asp-for="Team.DivisionId" class="col-sm-2 col-form-label">Division</label>
+        <label class="col-sm-2 col-form-label">Division</label>
         <div class="col-sm-10">
             <p class="form-control-static">@Model.Team.Division.Name</p>
         </div>
@@ -24,33 +24,70 @@
     </div>
 
     <div class="form-group row">
-        <label for="manager-select" class="col-sm-2 col-form-label">Manager(s)</label>
-        <div class="col-sm-10">
-            <select id="manager-select" asp-items="Model.Profiles" class="form-control custom-select w-auto"></select>
-            <button id="manager-save-button" type="button" class="btn btn-success"><span class="icon icon-plus"></span> Add</button>
-            
-            <ul id="manager-list" class="list-group list-group-flush mt-2">
-                @for (var i = 0; i < Model.Team.Managers.Count; i++) {
-                    <li class="list-group-item">
-                        @Model.Team.Managers[i].Profile.FullName
-                        <input type="hidden" name="Managers[@i]" value="@Model.Team.Managers[i].ProfileId" />
-                    </li>
-                }
-            </ul>
-        </div>
-    </div>
-
-    <div class="form-group row">
         <div class="offset-sm-2 col-sm-10">
             <button type="submit" class="btn btn-success">
                 <span class="icon icon-edit"></span> Edit
             </button>
         </div>
     </div>
-
-    <input id="team-id" name="Id" type="hidden" value="@Model.Team.Id" />
 </form>
 
-@section Scripts {
-    <script type="text/javascript">InitiateManagerSelect()</script>
-}
+<h1 class="app-page-title mt-5">Manager(s)</h1>
+
+<div class="form-group row">
+    <div class="offset-sm-2 col-sm-10">
+        <form asp-action="Manager" asp-route-id="@Model.Team.Id" method="post">
+            <select asp-for="ManagerId" asp-items="Model.Profiles" class="form-control custom-select w-auto"></select>
+            <button type="submit" class="btn btn-success"><span class="icon icon-save"></span> Save</button>
+        </form>
+
+        <ul class="list-group list-group-flush mt-2">
+            @if (!Model.Team.Managers.Any()) {
+                <li class="list-group-item">
+                    <p class="card-text">None</p>
+                </li>
+            }
+
+            @foreach (var manager in Model.Team.Managers) {
+                <li class="list-group-item justify-content-start">
+                    @manager.Profile.FullName
+
+                    <button type="button" class="btn btn-sm btn-danger ml-auto" data-toggle="modal" data-target="#delete-confirmation" data-target-form="#form-delete-manager-@manager.ProfileId"><span class="icon icon-erase"></span> Delete</button>
+                    <form class="hidden-xs-up" id="form-delete-manager-@manager.ProfileId" asp-action="DeleteManager" asp-route-id="@Model.Team.Id">
+                        <input type="hidden" name="ManagerId" value="@manager.ProfileId" />
+                    </form>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<h1 class="app-page-title mt-5">Roster</h1>
+
+<div class="form-group row">
+    <div class="offset-sm-2 col-sm-10">
+        <form asp-action="Roster" asp-route-id="@Model.Team.Id" method="post">
+            <select asp-for="PlayerId" asp-items="Model.Profiles" class="form-control custom-select w-auto"></select>
+            <button type="submit" class="btn btn-success"><span class="icon icon-save"></span> Save</button>
+        </form>
+
+        <ul class="list-group list-group-flush mt-2">
+            @if (!Model.Team.Roster.Any()) {
+                <li class="list-group-item">
+                    <p class="card-text">None</p>
+                </li>
+            }
+
+            @foreach (var player in Model.Team.Roster) {
+                <li class="list-group-item justify-content-start">
+                    @player.Profile.FullName
+
+                    <button type="button" class="btn btn-sm btn-danger ml-auto" data-toggle="modal" data-target="#delete-confirmation" data-target-form="#form-delete-player-@player.ProfileId"><span class="icon icon-erase"></span> Delete</button>
+                    <form class="hidden-xs-up" id="form-delete-player-@player.ProfileId" asp-action="DeletePlayer" asp-route-id="@Model.Team.Id">
+                        <input type="hidden" name="PlayerId" value="@player.ProfileId" />
+                    </form>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

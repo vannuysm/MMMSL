@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using mmmsl.Areas.Manage.Models;
 using mmmsl.Models;
@@ -110,6 +110,7 @@ namespace mmmsl.Areas.Manage.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var profileToDelete = await database.Profiles.SingleOrDefaultAsync(p => p.Id == id);

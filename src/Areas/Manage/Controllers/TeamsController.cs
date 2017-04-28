@@ -50,11 +50,9 @@ namespace mmmsl.Areas.Manage.Controllers
         public async Task<IActionResult> Create(EditTeamModel model)
         {
             if (!ModelState.IsValid) {
-                return View(model);
+                return View(await CreateEditTeamModelAsync(model.Team));
             }
-
-            UpdateTeamManagers(model.Managers, model.Team);
-
+            
             await database.Teams.AddAsync(model.Team);
             await database.SaveChangesAsync();
 
@@ -66,6 +64,7 @@ namespace mmmsl.Areas.Manage.Controllers
             var team = await database.Teams
                 .Include(t => t.Division)
                 .Include(t => t.Managers).ThenInclude(teamManager => teamManager.Profile)
+                .Include(t => t.Roster).ThenInclude(player => player.Profile)
                 .SingleOrDefaultAsync(t => t.Id == id);
 
             if (team == null) {
@@ -78,13 +77,14 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(int id, List<int> managers)
+        public async Task<IActionResult> EditPost(int id, EditTeamPostModel model)
         {
             database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
             
             var teamToUpdate = await database.Teams
                 .Include(t => t.Division)
-                .Include(t => t.Managers)
+                .Include(t => t.Managers).ThenInclude(teamManager => teamManager.Profile)
+                .Include(t => t.Roster).ThenInclude(player => player.Profile)
                 .SingleOrDefaultAsync(p => p.Id == id);
 
             if (teamToUpdate == null) {
@@ -94,8 +94,6 @@ namespace mmmsl.Areas.Manage.Controllers
             var didModelUpdate = await TryUpdateModelAsync(teamToUpdate, "Team", t => t.Name);
 
             if (didModelUpdate) {
-                UpdateTeamManagers(managers, teamToUpdate);
-
                 try {
                     await database.SaveChangesAsync();
                     return RedirectToAction("Index", new { id = teamToUpdate.DivisionId });
@@ -105,10 +103,12 @@ namespace mmmsl.Areas.Manage.Controllers
                 }
             }
 
-            return View(teamToUpdate);
+            var failedModel = await CreateEditTeamModelAsync(teamToUpdate);
+            return View(failedModel);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var teamToDelete = await database.Teams.SingleOrDefaultAsync(p => p.Id == id);
@@ -117,7 +117,6 @@ namespace mmmsl.Areas.Manage.Controllers
             if (teamToDelete == null) {
                 return RedirectToAction("Index");
             }
-
 
             try {
                 database.Teams.Remove(teamToDelete);
@@ -130,49 +129,112 @@ namespace mmmsl.Areas.Manage.Controllers
             return RedirectToAction("Index", new { id = divisionId });
         }
 
-        [Route("manage/teams/{id}/players/json")]
-        public async Task<IActionResult> GetPlayers(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Manager(int id, int managerId)
         {
-            if (id == 0) {
-                return BadRequest();
-            }
+            database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
 
             var team = await database.Teams
-                .Include(t => t.Roster)
-                .ThenInclude(roster => roster.Profile)
-                .SingleOrDefaultAsync(t => t.Id == id);
-            
-            return Json(team.Roster.Select(roster => roster.Profile));
-        }
+                    .Include(t => t.Managers)
+                    .SingleOrDefaultAsync(g => g.Id == id);
 
-        private void UpdateTeamManagers(List<int> managers, Team team)
-        {
-            if (managers == null) {
-                team.Managers = new List<TeamManager>();
-                return;
+            if (team == null) {
+                return NotFound();
             }
 
-            var selectedManagers = new HashSet<int>(managers);
-            var currentManagers = new HashSet<int>(team.Managers.Select(teamManager => teamManager.ProfileId));
-
-            if (selectedManagers.SetEquals(currentManagers)) {
-                return;
+            if (team.Managers.Any(manager => manager.ProfileId == managerId)) {
+                return RedirectToAction("Edit", new { id = id });
             }
 
-            team.Managers.RemoveAll(teamManager => {
-                return currentManagers.Contains(teamManager.ProfileId) && !selectedManagers.Contains(teamManager.ProfileId);
+            team.Managers.Add(new TeamManager {
+                TeamId = id,
+                ProfileId = managerId
             });
 
-            var managersToAdd = managers
-                .Where(manager => !currentManagers.Contains(manager))
-                .Select(manager => new TeamManager {
-                    ProfileId = manager,
-                    TeamId = team.Id
-                });
-
-            if (managersToAdd.Any()) {
-                team.Managers.AddRange(managersToAdd);
+            try {
+                await database.SaveChangesAsync();
             }
+            catch (DbUpdateException) {
+                ModelState.AddModelError("", ErrorMessages.Database);
+            }
+
+            return RedirectToAction("Edit", new { id = id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteManager(int id, int managerId)
+        {
+            var managerToDelete = await database.TeamManagers.SingleOrDefaultAsync(manager => manager.TeamId == id && manager.ProfileId == managerId);
+
+            if (managerToDelete == null) {
+                return RedirectToAction("Edit", new { id = id });
+            }
+
+            try {
+                database.TeamManagers.Remove(managerToDelete);
+                await database.SaveChangesAsync();
+            }
+            catch (DbUpdateException) {
+                ModelState.AddModelError("", ErrorMessages.Database);
+            }
+
+            return RedirectToAction("Edit", new { id = id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Roster(int id, int playerId)
+        {
+            database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+
+            var team = await database.Teams
+                    .Include(t => t.Roster)
+                    .SingleOrDefaultAsync(g => g.Id == id);
+
+            if (team == null) {
+                return NotFound();
+            }
+
+            if (team.Roster.Any(manager => manager.ProfileId == playerId)) {
+                return RedirectToAction("Edit", new { id = id });
+            }
+
+            team.Roster.Add(new RosterPlayer {
+                TeamId = id,
+                ProfileId = playerId
+            });
+
+            try {
+                await database.SaveChangesAsync();
+            }
+            catch (DbUpdateException) {
+                ModelState.AddModelError("", ErrorMessages.Database);
+            }
+
+            return RedirectToAction("Edit", new { id = id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePlayer(int id, int playerId)
+        {
+            var playerToDelete = await database.RosterPlayers.SingleOrDefaultAsync(player => player.TeamId == id && player.ProfileId == playerId);
+
+            if (playerToDelete == null) {
+                return RedirectToAction("Edit", new { id = id });
+            }
+
+            try {
+                database.RosterPlayers.Remove(playerToDelete);
+                await database.SaveChangesAsync();
+            }
+            catch (DbUpdateException) {
+                ModelState.AddModelError("", ErrorMessages.Database);
+            }
+
+            return RedirectToAction("Edit", new { id = id });
         }
 
         private async Task<EditTeamModel> CreateEditTeamModelAsync(Team team = null)

@@ -95,7 +95,6 @@ namespace mmmsl.Areas.Manage.Controllers
             
             var didModelUpdate = await TryUpdateModelAsync(gameToUpdate, "Game",
                 g => g.Id,
-                g => g.DivisionId,
                 g => g.HomeTeamId,
                 g => g.AwayTeamId,
                 g => g.DateAndTime,
@@ -116,6 +115,7 @@ namespace mmmsl.Areas.Manage.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var gameToDelete = await database.Games.SingleOrDefaultAsync(p => p.Id == id);
@@ -179,6 +179,28 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteGoal(int id)
+        {
+            var goalToDelete = await database.Goals.SingleOrDefaultAsync(goal => goal.Id == id);
+            var returnUrl = $"{Url.Action("Edit", new { id = goalToDelete?.GameId })}#team-{goalToDelete?.TeamId}";
+
+            if (goalToDelete == null) {
+                return Redirect("Index");
+            }
+
+            try {
+                database.Goals.Remove(goalToDelete);
+                await database.SaveChangesAsync();
+            }
+            catch (DbUpdateException) {
+                ModelState.AddModelError("", ErrorMessages.Database);
+            }
+
+            return Redirect(returnUrl);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Penalty(int id, EditPenaltyModel model)
         {
             database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
@@ -210,6 +232,28 @@ namespace mmmsl.Areas.Manage.Controllers
 
             var redirectUrl = Url.Action("Edit", new { id = game.Id });
             return Redirect($"{redirectUrl}#team-{model.TeamId}");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePenalty(int id)
+        {
+            var penaltyToDelete = await database.Penalties.SingleOrDefaultAsync(penalty => penalty.Id == id);
+            var returnUrl = $"{Url.Action("Edit", new { id = penaltyToDelete?.GameId })}#team-{penaltyToDelete?.TeamId}";
+
+            if (penaltyToDelete == null) {
+                return Redirect("Index");
+            }
+
+            try {
+                database.Penalties.Remove(penaltyToDelete);
+                await database.SaveChangesAsync();
+            }
+            catch (DbUpdateException) {
+                ModelState.AddModelError("", ErrorMessages.Database);
+            }
+
+            return Redirect(returnUrl);
         }
 
         private async Task<EditGameModel> CreateEditGameModelAsync(Game game = null)

@@ -29,7 +29,7 @@
                 <td>@game.HomeTeam.Name</td>
                 <td>@game.AwayTeam.Name</td>
                 <td>@game.Field.Description</td>
-                <td>@Html.Partial("Actions", game)</td>
+                <td>@Html.Partial("Actions", game.Id.ToString())</td>
             </tr>
         }
     </tbody>

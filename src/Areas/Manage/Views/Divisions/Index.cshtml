@@ -1,4 +1,4 @@
-@model PaginatedList<Division>
+﻿@model PaginatedList<Division>
 
 @{
     ViewData["Title"] = "Manage Divisions";
@@ -21,7 +21,7 @@
         @foreach(var division in Model) {
             <tr>
                 <td>@division.Name</td>
-                <td>@Html.Partial("Actions", division)</td>
+                <td>@Html.Partial("Actions", division.Id)</td>
             </tr>
         }
     </tbody>

@@ -1,4 +1,4 @@
-@model PaginatedList<Profile>
+﻿@model PaginatedList<Profile>
 
 @{
     ViewData["Title"] = "Manage Profiles";
@@ -29,7 +29,7 @@
                         <a href="mailto:@(profile.Email)">@profile.Email</a>
                     }
                 </td>
-                <td>@Html.Partial("Actions", profile)</td>
+                <td>@Html.Partial("Actions", profile.Id.ToString())</td>
             </tr>
         }
     </tbody>

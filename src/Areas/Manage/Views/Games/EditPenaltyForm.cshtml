@@ -24,9 +24,12 @@
     }
 
     @foreach (var penalty in Model.Game.TeamPenalties(Model.TeamId).OrderBy(p => p.Player.FirstName).ThenBy(p => p.Player.LastName)) {
-        <li class="list-group-item">
+        <li class="list-group-item justify-content-start">
             <small><abbr class="p-1 mr-1 @(penalty.PenaltyCard.Severity == PenaltyCardSeverity.Red ? "app-penalty-card-red" : "app-penalty-card-yellow")" data-toggle="tooltip" data-placement="top" title="@penalty.PenaltyCard.Title">@penalty.MisconductCode</abbr></small>
             @penalty.Player.FullName
+
+            <button type="button" class="btn btn-sm btn-danger ml-auto" data-toggle="modal" data-target="#delete-confirmation" data-target-form="#form-delete-penalty-@penalty.Id"><span class="icon icon-erase"></span> Delete</button>
+            <form class="hidden-xs-up" id="form-delete-penalty-@penalty.Id" asp-action="DeletePenalty" asp-route-id="@penalty.Id"></form>
         </li>
     }
 </ul>
