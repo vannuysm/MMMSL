@@ -108,5 +108,20 @@ namespace mmmsl.Areas.Manage.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [Route("manage/divisions/{id}/teams/json")]
+        public async Task<IActionResult> GetTeams(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id)) {
+                return BadRequest();
+            }
+
+            var teams = await database.Teams
+                .Where(team => team.DivisionId == id)
+                .OrderBy(team => team.Name)
+                .ToListAsync();
+
+            return Json(teams);
+        }
     }
 }
