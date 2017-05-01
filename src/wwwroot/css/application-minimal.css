@@ -125,6 +125,10 @@
     object-fit: contain;
 }
 
+_:-ms-input-placeholder, :root .app-logo {
+    height: auto;
+}
+
 .app-page-title {
   font-weight: 400;
   text-align: center;
@@ -205,7 +209,7 @@
     opacity: 0.5 !important;
 }
 
-:-ms-input-placeholder {
+input:-ms-input-placeholder {
     color: #666 !important;
     opacity: 0.5 !important;
 }

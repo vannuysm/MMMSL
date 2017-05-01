@@ -1,6 +1,6 @@
 ﻿(function ($) {
     if (window.location.hash) {
-        var link = $(`a.nav-link[href="${window.location.hash}"]`);
+        var link = $('a.nav-link[href="' + window.location.hash + '"]');
 
         if (link.length > 0) {
             link.tab('show');
@@ -28,7 +28,9 @@
     window.InitiateDivisionalTeamSelect = function () {
         document.querySelector('.select-division-source').addEventListener('input', function (ev) {
             var divisionId = ev.target.value;
-            fetch(`/manage/divisions/${divisionId}/teams/json`, { credentials: 'same-origin' })
+            var url = '/manage/divisions/' + divisionId + '/teams/json';
+
+            fetch(url, { credentials: 'same-origin' })
                 .then(function (response) { return response.json(); })
                 .then(function (teams) {
                     document.querySelectorAll('.select-team-destination').forEach(function (element) {
