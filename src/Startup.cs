@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -68,6 +69,7 @@ namespace mmmsl
             services.AddDbContext<MmmslDatabase>(options => options.UseSqlServer(Configuration.GetConnectionString("mmmsl")));
             services.AddOptions();
             services.Configure<Auth0Settings>(Configuration.GetSection("Auth0"));
+            services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IOptions<OpenIdConnectOptions> oidcOptions, MmmslDatabase database)

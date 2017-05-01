@@ -5,8 +5,6 @@ using mmmsl.Areas.Manage.Models;
 using mmmsl.Models;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System;
 
 namespace mmmsl.Areas.Manage.Controllers
 {
@@ -47,6 +45,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> Create(EditTeamModel model)
         {
             if (!ModelState.IsValid) {
@@ -54,7 +53,13 @@ namespace mmmsl.Areas.Manage.Controllers
             }
             
             await database.Teams.AddAsync(model.Team);
-            await database.SaveChangesAsync();
+
+            try {
+                await database.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
+            }
 
             return RedirectToAction("Index", new { id = model.Team.DivisionId });
         }
@@ -77,7 +82,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(int id, EditTeamPostModel model)
+        public async Task<IActionResult> EditPost(int id)
         {
             database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
             
@@ -98,8 +103,8 @@ namespace mmmsl.Areas.Manage.Controllers
                     await database.SaveChangesAsync();
                     return RedirectToAction("Index", new { id = teamToUpdate.DivisionId });
                 }
-                catch (DbUpdateException) {
-                    ModelState.AddModelError("", ErrorMessages.Database);
+                catch (DbUpdateException ex) {
+                    ModelState.AddDatabaseError(ex);
                 }
             }
 
@@ -109,21 +114,22 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> Delete(int id)
         {
             var teamToDelete = await database.Teams.SingleOrDefaultAsync(p => p.Id == id);
             var divisionId = teamToDelete?.DivisionId;
 
             if (teamToDelete == null) {
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
             try {
                 database.Teams.Remove(teamToDelete);
                 await database.SaveChangesAsync();
             }
-            catch (DbUpdateException) {
-                ModelState.AddModelError("", ErrorMessages.Database);
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
 
             return RedirectToAction("Index", new { id = divisionId });
@@ -131,6 +137,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> Manager(int id, int managerId)
         {
             database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
@@ -155,8 +162,8 @@ namespace mmmsl.Areas.Manage.Controllers
             try {
                 await database.SaveChangesAsync();
             }
-            catch (DbUpdateException) {
-                ModelState.AddModelError("", ErrorMessages.Database);
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
 
             return RedirectToAction("Edit", new { id = id });
@@ -164,20 +171,21 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> DeleteManager(int id, int managerId)
         {
             var managerToDelete = await database.TeamManagers.SingleOrDefaultAsync(manager => manager.TeamId == id && manager.ProfileId == managerId);
 
             if (managerToDelete == null) {
-                return RedirectToAction("Edit", new { id = id });
+                return NotFound();
             }
 
             try {
                 database.TeamManagers.Remove(managerToDelete);
                 await database.SaveChangesAsync();
             }
-            catch (DbUpdateException) {
-                ModelState.AddModelError("", ErrorMessages.Database);
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
 
             return RedirectToAction("Edit", new { id = id });
@@ -185,6 +193,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> Roster(int id, int playerId)
         {
             database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
@@ -209,8 +218,8 @@ namespace mmmsl.Areas.Manage.Controllers
             try {
                 await database.SaveChangesAsync();
             }
-            catch (DbUpdateException) {
-                ModelState.AddModelError("", ErrorMessages.Database);
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
 
             return RedirectToAction("Edit", new { id = id });
@@ -218,20 +227,21 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> DeletePlayer(int id, int playerId)
         {
             var playerToDelete = await database.RosterPlayers.SingleOrDefaultAsync(player => player.TeamId == id && player.ProfileId == playerId);
 
             if (playerToDelete == null) {
-                return RedirectToAction("Edit", new { id = id });
+                return NotFound();
             }
 
             try {
                 database.RosterPlayers.Remove(playerToDelete);
                 await database.SaveChangesAsync();
             }
-            catch (DbUpdateException) {
-                ModelState.AddModelError("", ErrorMessages.Database);
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
 
             return RedirectToAction("Edit", new { id = id });

@@ -33,6 +33,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> Create(Profile profile)
         {
             if (!ModelState.IsValid) {
@@ -40,7 +41,13 @@ namespace mmmsl.Areas.Manage.Controllers
             }
 
             await database.Profiles.AddAsync(profile);
-            await database.SaveChangesAsync();
+
+            try {
+                await database.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
+            }
 
             return RedirectToAction("Index");
         }
@@ -63,6 +70,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> EditPost(int id, EditProfileModel model)
         {
             database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
@@ -76,16 +84,19 @@ namespace mmmsl.Areas.Manage.Controllers
             }
             
             var didModelUpdate = await TryUpdateModelAsync(profileToUpdate, "Profile",
-                p => p.Id,
                 p => p.FirstName,
                 p => p.LastName,
                 p => p.Email);
+
+            if (!didModelUpdate) {
+                model.Profile = profileToUpdate;
+                return View(model);
+            }
 
             var userIsAdministrator = profileToUpdate.HasRole(AppRoles.Administrator);
 
             if (userIsAdministrator && !model.MakeAdministrator) {
                 profileToUpdate.Roles.Remove(profileToUpdate.GetRole(AppRoles.Administrator));
-                didModelUpdate = true;
             }
 
             if (!userIsAdministrator && model.MakeAdministrator) {
@@ -93,38 +104,37 @@ namespace mmmsl.Areas.Manage.Controllers
                     Name = AppRoles.Administrator,
                     ProfileId = id
                 });
-                didModelUpdate = true;
+            }
+            
+            try {
+                await database.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
 
-            if (didModelUpdate) {
-                try {
-                    await database.SaveChangesAsync();
-                    return RedirectToAction("Index");
-                }
-                catch (DbUpdateException) {
-                    ModelState.AddModelError("", ErrorMessages.Database);
-                }
-            }
-
-            return View(profileToUpdate);
+            model.Profile = profileToUpdate;
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> Delete(int id)
         {
             var profileToDelete = await database.Profiles.SingleOrDefaultAsync(p => p.Id == id);
 
             if (profileToDelete == null) {
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
             try {
                 database.Profiles.Remove(profileToDelete);
                 await database.SaveChangesAsync();
             }
-            catch (DbUpdateException) {
-                ModelState.AddModelError("", ErrorMessages.Database);
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
 
             return RedirectToAction("Index");

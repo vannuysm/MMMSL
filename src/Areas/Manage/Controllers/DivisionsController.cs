@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using mmmsl.Models;
-using System.Threading.Tasks;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 namespace mmmsl.Areas.Manage.Controllers
 {
@@ -30,6 +29,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> Create(Division division)
         {
             if (!ModelState.IsValid) {
@@ -43,7 +43,13 @@ namespace mmmsl.Areas.Manage.Controllers
                 .ToLowerInvariant();
 
             await database.Divisions.AddAsync(division);
-            await database.SaveChangesAsync();
+
+            try {
+                await database.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
+            }
 
             return RedirectToAction("Index");
         }
@@ -61,6 +67,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> EditPost(string id)
         {
             database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
@@ -71,17 +78,16 @@ namespace mmmsl.Areas.Manage.Controllers
                 return NotFound();
             }
             
-            var didModelUpdate = await TryUpdateModelAsync(divisionToUpdate, "",
-                d => d.Id,
-                d => d.Name);
+            var didModelUpdate = await TryUpdateModelAsync(divisionToUpdate, "", d => d.Name);
 
             if (didModelUpdate) {
                 try {
                     await database.SaveChangesAsync();
+
                     return RedirectToAction("Index");
                 }
-                catch (DbUpdateException) {
-                    ModelState.AddModelError("", ErrorMessages.Database);
+                catch (DbUpdateException ex) {
+                    ModelState.AddDatabaseError(ex);
                 }
             }
 
@@ -90,20 +96,21 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> Delete(string id)
         {
             var divisionToDelete = await database.Divisions.SingleOrDefaultAsync(p => p.Id == id);
 
             if (divisionToDelete == null) {
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
             try {
                 database.Divisions.Remove(divisionToDelete);
                 await database.SaveChangesAsync();
             }
-            catch (DbUpdateException) {
-                ModelState.AddModelError("", ErrorMessages.Database);
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
 
             return RedirectToAction("Index");

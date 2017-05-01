@@ -238,3 +238,7 @@
 .w-auto {
     width: auto !important;
 }
+
+.alert .list-group.list-group-flush > .list-group-item:last-child {
+    padding-bottom: 0;
+}

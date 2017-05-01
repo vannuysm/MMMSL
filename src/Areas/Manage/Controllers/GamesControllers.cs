@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using mmmsl.Areas.Manage.Models;
 using mmmsl.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using mmmsl.Areas.Manage.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using System;
 
 namespace mmmsl.Areas.Manage.Controllers
 {
@@ -47,6 +46,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> Create(Game game)
         {
             var model = await CreateEditGameModelAsync(game);
@@ -56,7 +56,13 @@ namespace mmmsl.Areas.Manage.Controllers
             }
 
             await database.Games.AddAsync(game);
-            await database.SaveChangesAsync();
+            try {
+                await database.SaveChangesAsync();
+                return RedirectToAction("Index", new { id = model.Game.DivisionId });
+            }
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
+            }
 
             return RedirectToAction("Index", new { id = model.Game.DivisionId });
         }
@@ -94,7 +100,6 @@ namespace mmmsl.Areas.Manage.Controllers
             }
             
             var didModelUpdate = await TryUpdateModelAsync(gameToUpdate, "Game",
-                g => g.Id,
                 g => g.HomeTeamId,
                 g => g.AwayTeamId,
                 g => g.DateAndTime,
@@ -106,8 +111,8 @@ namespace mmmsl.Areas.Manage.Controllers
                     await database.SaveChangesAsync();
                     return RedirectToAction("Index", new { id = gameToUpdate.DivisionId });
                 }
-                catch (DbUpdateException) {
-                    ModelState.AddModelError("", ErrorMessages.Database);
+                catch (DbUpdateException ex) {
+                    ModelState.AddDatabaseError(ex);
                 }
             }
 
@@ -116,21 +121,22 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> Delete(int id)
         {
             var gameToDelete = await database.Games.SingleOrDefaultAsync(p => p.Id == id);
             var divisionId = gameToDelete?.DivisionId;
 
             if (gameToDelete == null) {
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
             try {
                 database.Games.Remove(gameToDelete);
                 await database.SaveChangesAsync();
             }
-            catch (DbUpdateException) {
-                ModelState.AddModelError("", ErrorMessages.Database);
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
 
             return RedirectToAction("Index", new { id = divisionId });
@@ -138,6 +144,7 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> Goal(int id, EditGoalModel model)
         {
             database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
@@ -165,12 +172,13 @@ namespace mmmsl.Areas.Manage.Controllers
                     Count = model.Count
                 });
             }
-
+            
             try {
                 await database.SaveChangesAsync();
             }
-            catch (DbUpdateException) {
-                ModelState.AddModelError("", ErrorMessages.Database);
+
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
 
             var redirectUrl = Url.Action("Edit", new { id = game.Id });
@@ -179,28 +187,29 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> DeleteGoal(int id)
         {
             var goalToDelete = await database.Goals.SingleOrDefaultAsync(goal => goal.Id == id);
-            var returnUrl = $"{Url.Action("Edit", new { id = goalToDelete?.GameId })}#team-{goalToDelete?.TeamId}";
 
             if (goalToDelete == null) {
-                return Redirect("Index");
+                return NotFound();
             }
-
+            
             try {
                 database.Goals.Remove(goalToDelete);
                 await database.SaveChangesAsync();
             }
-            catch (DbUpdateException) {
-                ModelState.AddModelError("", ErrorMessages.Database);
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
-
-            return Redirect(returnUrl);
+            var redirectUrl = Url.Action("Edit", new { id = goalToDelete?.GameId });
+            return Redirect($"{redirectUrl}#team-{goalToDelete?.TeamId}");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> Penalty(int id, EditPenaltyModel model)
         {
             database.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
@@ -222,12 +231,12 @@ namespace mmmsl.Areas.Manage.Controllers
                 PlayerId = model.PlayerId,
                 MisconductCode = model.MisconductCode
             });
-
+            
             try {
                 await database.SaveChangesAsync();
             }
-            catch (DbUpdateException) {
-                ModelState.AddModelError("", ErrorMessages.Database);
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
 
             var redirectUrl = Url.Action("Edit", new { id = game.Id });
@@ -236,24 +245,25 @@ namespace mmmsl.Areas.Manage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [StashErrorsInTempData]
         public async Task<IActionResult> DeletePenalty(int id)
         {
             var penaltyToDelete = await database.Penalties.SingleOrDefaultAsync(penalty => penalty.Id == id);
-            var returnUrl = $"{Url.Action("Edit", new { id = penaltyToDelete?.GameId })}#team-{penaltyToDelete?.TeamId}";
 
             if (penaltyToDelete == null) {
-                return Redirect("Index");
+                return NotFound();
             }
-
+            
             try {
                 database.Penalties.Remove(penaltyToDelete);
                 await database.SaveChangesAsync();
             }
-            catch (DbUpdateException) {
-                ModelState.AddModelError("", ErrorMessages.Database);
+            catch (DbUpdateException ex) {
+                ModelState.AddDatabaseError(ex);
             }
 
-            return Redirect(returnUrl);
+            var redirectUrl = Url.Action("Edit", new { id = penaltyToDelete?.GameId });
+            return Redirect($"{redirectUrl}#team-{penaltyToDelete?.TeamId}");
         }
 
         private async Task<EditGameModel> CreateEditGameModelAsync(Game game = null)
