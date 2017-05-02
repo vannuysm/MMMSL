@@ -6,6 +6,7 @@ using mmmsl.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace mmmsl.Areas.Manage.Controllers
 {
@@ -106,8 +107,13 @@ namespace mmmsl.Areas.Manage.Controllers
                 g => g.Status,
                 g => g.FieldId);
 
+
             if (didModelUpdate) {
                 try {
+                    // Ensure all entries go in properly as EST
+                    var est = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                    gameToUpdate.DateAndTime = new DateTimeOffset(gameToUpdate.DateAndTime.DateTime, est.GetUtcOffset(gameToUpdate.DateAndTime));
+
                     await database.SaveChangesAsync();
                     return RedirectToAction("Index", new { id = gameToUpdate.DivisionId });
                 }
