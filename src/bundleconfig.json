@@ -18,6 +18,7 @@
         "outputFileName": "wwwroot/js/site.min.js",
         "inputFiles": [
             "wwwroot/js/polyfills.js",
+            "wwwroot/js/smoothscroll.js",
             "wwwroot/js/toolkit.js",
             "wwwroot/js/application.js"
         ],
@@ -31,6 +32,7 @@
         "outputFileName": "wwwroot/js/manage.min.js",
         "inputFiles": [
             "wwwroot/js/polyfills.js",
+            "wwwroot/js/smoothscroll.js",
             "wwwroot/js/toolkit.js",
             "wwwroot/js/application.js",
             "wwwroot/js/manage-delete-dialog.js",

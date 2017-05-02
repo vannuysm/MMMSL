@@ -7,6 +7,24 @@
         }
     }
 
+    $('.date').datetimepicker({
+        stepping: 15,
+        sideBySide: true,
+        ignoreReadonly: true,
+        allowInputToggle: true,
+        icons: {
+            time: 'icon icon-clock',
+            date: 'icon icon-calendar',
+            up: 'icon icon-chevron-up',
+            down: 'icon icon-chevron-down',
+            previous: 'icon icon-chevron-left',
+            next: 'icon icon-chevron-right',
+            today: 'icon icon-hair-cross',
+            clear: 'icon icon-erase',
+            close: 'icon icon-cross'
+        }
+    });
+
     $('a.nav-link').on('shown.bs.tab', function (e) {
         window.location.hash = e.target.hash;
     });

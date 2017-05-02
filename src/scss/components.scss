@@ -1,4 +1,4 @@
-// Bootstrap mixins
+﻿// Bootstrap mixins
 @import "./bootstrap/_mixins.scss";
 
 // Reset and dependencies
@@ -70,6 +70,9 @@
 @import "./custom/pull-quote.scss";
 @import "./custom/stage.scss";
 @import "./custom/typeahead.scss";
+
+// Custom components
+@import "./custom/datetimepicker.scss";
 
 //
 // Custom styles

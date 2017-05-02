@@ -20,8 +20,17 @@
         <div class="row mb-3">
             @foreach(var game in gameGroup) {
                 <div class="col-sm-6 mb-2">
-                    <div class="card app-card-schedule @(game.Status == GameStatus.Played ? "h-100" : "")">
-                        <div class="card-block">
+                    <div id="game-@game.Id" class="card app-card-schedule @(game.Status == GameStatus.Played ? "h-100" : "")">
+                        @if (game.Status == GameStatus.Rescheduled) {
+                            <div class="app-schedule-reschedule">
+                                <p class="app-schedule-reschedule-text mb-0">
+                                    <span class="icon icon-calendar"></span>
+                                    <a href="#game-@game.Id">Rescheduled</a>
+                                </p>
+                            </div>
+                        }
+
+                        <div class="card-block @(game.Status == GameStatus.Rescheduled ? "app-schedule-overlay" : "")">
                             <h4 class="card-title text-primary font-weight-bold">
                                 @game.HomeTeam.Name vs @game.AwayTeam.Name<br/>
                                 <span class="app-card-schedule-field">@game.Field?.Description</span>

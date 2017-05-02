@@ -209,7 +209,7 @@ _:-ms-input-placeholder, :root .app-logo {
     opacity: 0.5 !important;
 }
 
-input:-ms-input-placeholder {
+:-ms-input-placeholder {
     color: #666 !important;
     opacity: 0.5 !important;
 }
@@ -245,4 +245,21 @@ input:-ms-input-placeholder {
 
 .alert .list-group.list-group-flush > .list-group-item:last-child {
     padding-bottom: 0;
+}
+
+.app-schedule-overlay {
+    opacity: .3;
+    z-index: 99;
+}
+
+.app-schedule-reschedule {
+    position: absolute;
+    right: 1rem;
+    bottom: .5rem;
+    z-index: 100;
+}
+
+.app-schedule-reschedule-text {
+    font-weight: 600;
+    color: #666;
 }

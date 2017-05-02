@@ -28,8 +28,11 @@
 
     <div class="form-group row" bs-validation-for="Game.DateAndTime">
         <label asp-for="Game.DateAndTime" class="col-sm-2 col-form-label">Date/Time</label>
-        <div class="col-sm-10">
-            <input type="datetime-local" asp-for="Game.DateAndTime" class="form-control" required="required" />
+        <div class="col-sm-10 date input-group">
+            <input type="text" asp-for="Game.DateAndTime" class="form-control date-control" required="required" readonly="readonly" />
+            <span class="input-group-addon">
+                <span class="icon icon-calendar"></span>
+            </span>
         </div>
     </div>
 
