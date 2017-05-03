@@ -14,7 +14,7 @@
     @foreach(var gameGroup in dateEntry.Value) {
         <h3 class="h5">
             <span class="icon icon-clock text-info"></span>
-            @(gameGroup.Key.ToString("h:mm tt"))
+            @(gameGroup.Key.TimeOfDay == TimeSpan.Zero ? "TBD" : gameGroup.Key.ToString("h:mm tt"))
         </h3>
 
         <div class="row mb-3">
