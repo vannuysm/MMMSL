@@ -13,6 +13,7 @@ namespace mmmsl.Models
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
+        public DbSet<BoardMember> BoardMembers { get; set; }
         public DbSet<Division> Divisions { get; set; }
         public DbSet<Field> Fields { get; set; }
         public DbSet<Game> Games { get; set; }
@@ -28,6 +29,13 @@ namespace mmmsl.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<BoardMember>().HasKey(member => member.ProfileId);
+
+            modelBuilder.Entity<BoardMember>()
+                .HasOne(boardMember => boardMember.Profile)
+                .WithOne()
+                .HasForeignKey<BoardMember>(boardMember => boardMember.ProfileId);
+
             modelBuilder.Entity<Penalty>()
                 .HasOne(penalty => penalty.PenaltyCard)
                 .WithMany()
@@ -54,21 +62,6 @@ namespace mmmsl.Models
                 manager.TeamId
             });
 
-            modelBuilder.Entity<TeamManager>()
-                .HasOne(manager => manager.Profile)
-                .WithMany()
-                .HasForeignKey(manager => manager.ProfileId);
-
-            modelBuilder.Entity<TeamManager>()
-                .HasOne(manager => manager.Team)
-                .WithMany(team => team.Managers)
-                .HasForeignKey(manager => manager.TeamId);
-
-            modelBuilder.Entity<RosterPlayer>().HasKey(player => new {
-                player.ProfileId,
-                player.TeamId
-            });
-
             modelBuilder.Entity<RosterPlayer>()
                 .HasOne(player => player.Profile)
                 .WithMany()
@@ -79,9 +72,24 @@ namespace mmmsl.Models
                 .WithMany(team => team.Roster)
                 .HasForeignKey(player => player.TeamId);
 
+            modelBuilder.Entity<RosterPlayer>().HasKey(player => new {
+                player.ProfileId,
+                player.TeamId
+            });
+
+            modelBuilder.Entity<TeamManager>()
+                .HasOne(manager => manager.Profile)
+                .WithMany()
+                .HasForeignKey(manager => manager.ProfileId);
+
+            modelBuilder.Entity<TeamManager>()
+                .HasOne(manager => manager.Team)
+                .WithMany(team => team.Managers)
+                .HasForeignKey(manager => manager.TeamId);
+
             var foreignKeys = modelBuilder.Model
                 .GetEntityTypes()
-                .Where(e => !EntityWhiteList(e.ClrType))
+                .Where(e => !CascadeDeleteEntityWhiteList(e.ClrType))
                 .SelectMany(e => e.GetForeignKeys());
 
             foreach (var relationship in foreignKeys) {
@@ -89,7 +97,7 @@ namespace mmmsl.Models
             }
         }
 
-        private bool EntityWhiteList(Type type)
+        private bool CascadeDeleteEntityWhiteList(Type type)
         {
             return type == typeof(RosterPlayer)
                 || type == typeof(TeamManager);
