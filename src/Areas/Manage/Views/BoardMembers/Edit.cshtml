@@ -1,0 +1,29 @@
+﻿@model EditBoardMemberModel
+
+@{
+    ViewData["Title"] = "Edit Board Member";
+}
+
+<form asp-action="Edit" asp-route-id="@Model.BoardMember.Id" method="post">
+    <div class="form-group row" bs-validation-for="BoardMember.Title">
+        <label asp-for="BoardMember.Title" class="col-sm-2 col-form-label">Title</label>
+        <div class="col-sm-10">
+            <input asp-for="BoardMember.Title" class="form-control" placeholder="Title" required="required" />
+        </div>
+    </div>
+    
+    <div class="form-group row" bs-validation-for="BoardMember.ProfileId">
+        <label asp-for="BoardMember.ProfileId" class="col-sm-2 col-form-label">Member</label>
+        <div class="col-sm-10">
+            <select asp-for="BoardMember.ProfileId" asp-items="Model.Profiles" class="form-control"></select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="offset-sm-2 col-sm-10">
+            <button type="submit" class="btn btn-success">
+                <span class="icon icon-edit"></span> Edit
+            </button>
+        </div>
+    </div>
+</form>

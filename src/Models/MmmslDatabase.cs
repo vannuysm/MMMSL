@@ -29,12 +29,9 @@ namespace mmmsl.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BoardMember>().HasKey(member => member.ProfileId);
-
             modelBuilder.Entity<BoardMember>()
                 .HasOne(boardMember => boardMember.Profile)
-                .WithOne()
-                .HasForeignKey<BoardMember>(boardMember => boardMember.ProfileId);
+                .WithMany();
 
             modelBuilder.Entity<Penalty>()
                 .HasOne(penalty => penalty.PenaltyCard)

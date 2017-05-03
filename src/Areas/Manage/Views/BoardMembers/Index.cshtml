@@ -1,0 +1,32 @@
+﻿@model PaginatedList<BoardMember>
+
+@{
+    ViewData["Title"] = "Manage Board Members";
+}
+
+@if (!Model.Any()) {
+    Html.RenderPartial("NoRecords");
+    return;
+}
+
+<table class="table table-striped table-hover table-responsive">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Member</th>
+            <th>@Html.Partial("CreateNew")</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach(var boardMember in Model) {
+            <tr>
+                <td>@boardMember.Title</td>
+                <td>@boardMember.Profile.FullName</td>
+                <td>@Html.Partial("Actions", boardMember.Id.ToString())</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.Partial("Pagination")
