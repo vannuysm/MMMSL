@@ -86,6 +86,7 @@
     background-color: #eeeee6;
     color: #444;
     padding: 30px;
+    width: auto;
 }
 
 
@@ -289,10 +290,6 @@ body {
     height: 100%;
 }
 
-#main-nav {
-    z-index: 2100;
-}
-
 .slideout-menu {
     position: fixed;
     top: 0;
@@ -344,6 +341,10 @@ body {
 
     #main-nav-toggle {
         display: none;
+    }
+
+    .app-block-footer {
+        margin-right: 256px;
     }
 }
 
