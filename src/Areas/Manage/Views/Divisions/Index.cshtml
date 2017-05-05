@@ -25,6 +25,14 @@
             </tr>
         }
     </tbody>
-</table>
 
-@Html.Partial("Pagination")
+    @if (Model.TotalPages > 1) {
+        <tfoot>
+            <tr>
+                <td colspan="2">
+                    @Html.Partial("Pagination")
+                </td>
+            </tr>
+        </tfoot>
+    }
+</table>

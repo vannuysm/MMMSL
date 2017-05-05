@@ -1,15 +1,11 @@
-﻿@if (Model.TotalPages <= 1) {
-  return;
-}
-
-@{
+﻿@{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
     var prevPageIndex = Model.PageIndex > 1 ? Model.PageIndex - 1 : 1;
     var nextPageIndex = Model.PageIndex < Model.TotalPages ? Model.PageIndex + 1 : Model.PageIndex;
 }
-<nav data-pagination-for=".table">
-  <ul class="pagination justify-content-center">
+<nav>
+  <ul class="pagination justify-content-center mb-0">
     <li class="page-item @prevDisabled">
       <a class="page-link" aria-label="Previous" asp-action="Index" asp-route-page="@prevPageIndex">
         <span aria-hidden="true">&laquo;</span>
