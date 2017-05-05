@@ -2,36 +2,36 @@
     var accountAction = User.Identity.IsAuthenticated ? "Logout" : "Login";
 }
 
-<div class="container">
-    <nav class="navbar navbar-light navbar-toggleable-sm navbar-static-top text-uppercase app-navbar mb-3">
-        <button type="button" class="navbar-toggler navbar-toggler-right hidden-sm-up" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<nav id="main-nav" class="p-4 slideout-menu slideout-menu-right">
+    <h2 class="h6">
+        <nav-link class="nav-header-link" asp-controller="Divisions" asp-action="Index">
+            Divisions
+        </nav-link>
+    </h2>
+    
+    <h2 class="h6">
+        <nav-link class="nav-header-link" asp-controller="Teams" asp-action="Index">
+            Teams
+        </nav-link>
+    </h2>
         
-        <a class="navbar-brand mr-auto" href="/">
-            <img src="~/images/logo-with-text.svg" class="img-fluid app-logo" />
-        </a>
+    <h2 class="h6">
+        <nav-link class="nav-header-link" asp-controller="Games" asp-action="Index">
+            Games
+        </nav-link>
+    </h2>
+        
+    <h2 class="h6">
+        <nav-link class="nav-header-link" asp-controller="Profiles" asp-action="Index">
+            Profiles
+        </nav-link>
+    </h2>
+        
+    <h2 class="h6">
+        <nav-link class="nav-header-link" asp-controller="BoardMembers" asp-action="Index">
+            Board Members
+        </nav-link>
+    </h2>
 
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="nav navbar-nav ml-auto">
-                <nav-list-item class="nav-item" asp-controller="Divisions" asp-action="Index">
-                    Divisions
-                </nav-list-item>
-
-                <nav-list-item class="nav-item" asp-controller="Teams" asp-action="Index">
-                    Teams
-                </nav-list-item>
-
-                <nav-list-item class="nav-item" asp-controller="Games" asp-action="Index">
-                    Games
-                </nav-list-item>
-
-                <nav-list-item class="nav-item" asp-controller="Profiles" asp-action="Index">
-                    Profiles
-                </nav-list-item>
-
-                @Html.Partial("LoginNavItem")
-            </ul>
-        </div>
-    </nav>
-</div>
+    @Html.Partial("LoginNavItem")
+</nav>

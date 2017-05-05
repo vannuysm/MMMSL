@@ -1,4 +1,4 @@
-// minimal
+﻿// minimal
 $brand-primary:      #b2b74e;
 
 @import "./variables.scss";
@@ -37,3 +37,25 @@ $navbar-toggler-bg: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 
 $input-height-base: 39px;
 
 @import "./components.scss";
+
+html {
+    font-size: 14px;
+}
+
+@include media-breakpoint-up(sm) {
+    html {
+        font-size: 13px;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    html {
+        font-size: 16px;
+    }
+}

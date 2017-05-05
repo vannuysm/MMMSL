@@ -1,4 +1,4 @@
-@if (Model.TotalPages <= 1) {
+﻿@if (Model.TotalPages <= 1) {
   return;
 }
 
@@ -8,7 +8,7 @@
     var prevPageIndex = Model.PageIndex > 1 ? Model.PageIndex - 1 : 1;
     var nextPageIndex = Model.PageIndex < Model.TotalPages ? Model.PageIndex + 1 : Model.PageIndex;
 }
-<nav>
+<nav data-pagination-for=".table">
   <ul class="pagination justify-content-center">
     <li class="page-item @prevDisabled">
       <a class="page-link" aria-label="Previous" asp-action="Index" asp-route-page="@prevPageIndex">

@@ -1,5 +1,13 @@
 ﻿[
     {
+        "outputPath": "wwwroot/css",
+        "inputFiles": [
+            "scss/toolkit-minimal.scss",
+            "scss/application-minimal.scss",
+            "scss/manage-minimal.scss"
+        ]
+    },
+    {
         "outputFileName": "wwwroot/css/site.min.css",
         "inputFiles": [
             "wwwroot/css/toolkit-minimal.css",

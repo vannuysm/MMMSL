@@ -1,7 +1,37 @@
-﻿@{
+﻿@model LeagueInformationIndexModel
+
+@{
     ViewData["Title"] = "League Information";
 }
 
-<div class="block block-inverse app-block-intro">
-    <h1>No information has been posted yet.</h1>
+<div class="row">
+    <div class="col-md-6">
+        <h2>Board Members</h2>
+
+        <div class="list-group">
+            @if (!Model.BoardMembers.Any()) {
+                <div class="list-group-item">
+                    <h5 class="mb-1">Nothing hase been posted yet.</h5>
+                </div>
+            }
+
+            @foreach (var boardMember in Model.BoardMembers) {
+                <a href="mailto:@(boardMember.Email)" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">@boardMember.Profile.FullName</h5>
+                        <span class="icon icon-mail"></span>
+                    </div>
+                    <small class="text-muted">@boardMember.Title</small>
+                </a>
+            }
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h2>Documents</h2>
+
+        <div class="list-group-item">
+            <h5 class="mb-1">Nothing hase been posted yet.</h5>
+        </div>
+    </div>
 </div>

@@ -1,7 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -16,15 +15,23 @@
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/css/manage.min.css" asp-append-version="true" />
     </environment>
-
-    @RenderSection("Stylesheets", required: false)
 </head>
 <body>
     @await Component.InvokeAsync("ManagementNavigation")
 
-    @await Component.InvokeAsync("Alerts")
+    <section id="main" class="container-fluid pt-2 slideout-panel slideout-panel-right">
+        <header class="d-flex justify-content-between align-items-start mb-3">
+            <a href="/">
+                <img src="~/images/logo-with-text.svg" class="img-fluid app-logo" />
+            </a>
+            
+            <button id="main-nav-toggle" type="button" class="btn btn-link ml-auto" aria-label="Toggle navigation">
+                <span class="icon icon-menu"></span>
+            </button>
+        </header>
 
-    <section class="container">
+        @await Component.InvokeAsync("Alerts")
+
         @if (!string.IsNullOrWhiteSpace((string)ViewData["Title"])) {
             <h1 class="app-page-title">@ViewData["Title"]</h1>
         }
@@ -63,7 +70,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" integrity="sha256-1hjUhpc44NwiNg8OwMu2QzJXhD8kcj+sJA3aCQZoUjg=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js" integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU=" crossorigin="anonymous"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+    
     <environment names="Development">
         <script src="~/js/polyfills.js"></script>
         <script src="~/js/smoothscroll.js"></script>

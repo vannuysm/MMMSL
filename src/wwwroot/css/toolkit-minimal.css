@@ -8439,3 +8439,18 @@ h6, .h6 {
 
 strong {
   font-weight: bold; }
+
+html {
+  font-size: 14px; }
+
+@media (min-width: 576px) {
+  html {
+    font-size: 13px; } }
+
+@media (min-width: 768px) {
+  html {
+    font-size: 14px; } }
+
+@media (min-width: 992px) {
+  html {
+    font-size: 16px; } }

@@ -79,7 +79,8 @@ namespace mmmsl.Areas.Manage.Controllers
             
             var didModelUpdate = await TryUpdateModelAsync(boardMemberToUpdate, "BoardMember",
                 bm => bm.Title,
-                bm => bm.ProfileId);
+                bm => bm.ProfileId,
+                bm => bm.Email);
 
             if (didModelUpdate) {
                 try {

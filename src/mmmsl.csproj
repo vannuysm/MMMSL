@@ -6,8 +6,7 @@
     <Content Include="web.*.config" CopyToPublishDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="BuildBundlerMinifier" Version="2.4.337" />
-    <PackageReference Include="Humanizer.Core" Version="2.1.0" />
+    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="1.1.1" />
