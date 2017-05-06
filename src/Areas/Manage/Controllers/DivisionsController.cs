@@ -37,10 +37,7 @@ namespace mmmsl.Areas.Manage.Controllers
             }
 
             division.Name = division.Name.Trim();
-            division.Id = division.Name
-                .Underscore()
-                .Dasherize()
-                .ToLowerInvariant();
+            division.Id = division.Name.Kebaberize();
 
             await database.Divisions.AddAsync(division);
 
